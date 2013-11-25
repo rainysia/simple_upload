@@ -6,33 +6,75 @@
     <title><?php echo getMultiLang('简易文件上传');?></title>
 </head>
 <style type="text/css">
+* {margin:0;padding:0;}
+body {color:#333;font-size:12px;font-family:'微软雅黑','宋体';}
+a {text-decoration:none;}
+a:hover {color:red;text-decoration:underline;}
+.upload_file {text-decoration:none;font:bold 1em 'Trebuchet MS',Arial, Helvetica;text-align:center;color:#757575;border:0px solid #9c9c9c;
+    text-shadow: 0 1px 0 rgba(0,0,0,0.4);
+    box-shadow: 0 0 .05em rgba(0,0,0,0.4);
+    -moz-box-shadow: 0 0 .05em rgba(0,0,0,0.4);
+    -webkit-box-shadow: 0 0 .05em rgba(0,0,0,0.4);
+}
+.btnOrder {text-decoration:none;text-align:center;color:black;
+    text-shadow: 0 1px 0 rgba(0,0,0,0);
+    box-shadow: 0 0 .05em rgba(0,0,0,0.4);
+    -moz-box-shadow: 0 0 .05em rgba(0,0,0,0.4);
+    -webkit-box-shadow: 0 0 .05em rgba(0,0,0,0.4);
+}
+.button:hover .upload_file:hover {
+    box-shadown:0 0 .1em rgba(0,0,0,0.4);
+    -moz-box-shadow:0 0 .1em rgba(0,0,0,0.4);
+    -webkit-box-shadown:0 0 .1em rgba(0,0,0,0.4);
+}
+#form1 {padding:10px 0 10px 20px;
+    background:#FFE7EF;
+    background:-moz-linear-gradient(top,#FFDAE5,#FFFFFF);
+    background:-o-linear-gradient(top,#FFDAE5,#FFFFFF);
+    background:-webkit-gradient(linear, 0 0, 0 bottom, from(#FFDAE5), to(#FFFFFF));
+    filter:progid:DXImageTransform.Microsoft.gradient(startcolorstr=#FFDAE5,endcolorstr=#FFFFFF,gradientType=0);
+    *zoom:1;
+}
+#form1 .choose1 {margin:0 0 0 20px;}
+#form1 .file1 {margin:10px 0 5px 30px;}
+#form1 .btn1 {margin:0px 0 0 30px;}
+#form1 .btn1 input {padding:0 4px 0 4px;}
+#typeAll {padding:10px 0px 0px 50px;}
+#typeAll .hr1 {width:85%;height:5px;margin:2px 2px 2px 0;background:rgba(237,20,91,.85)!important;
+	-moz-box-shadow:0px 0px 1px #c3c3c3;
+	-webkit-box-shadow:0px 0px 1px #c3c3c3;
+    -box-shadow:0px 0px 1px #c3c3c3;}
+#typeAll a {text-decoration:none;font-weight:bold;font-size:18px;color:#000000;}
+#typeAll a:hover {text-decoration:underline;color:#ED145B;font-size:18px;}
+.table1tr1 {display:block;background:#909090;color:#FFFFFF;width:85%;margin-bottom:5px;
+}
+#table1 {margin:0px 0 0 50px;}
+#table1 th {text-align:left;margin-bottom:20px;}
+#table1 th .th1 {display:block;padding-bottom:10px;text-align:left;margin-left:10px;}
+#table1 th .th2 {display:block;padding-bottom:10px;text-align:left;}
+#table1 tr td span a {color:#3a3a3a;text-decoration:none;font-size:14px;font-weight:none;}
+#table1 tr td span a:hover {color:#ED145B;text-decoration:underline;font-size:14px;font-weight:bold;}
 </style>
 <body>
+<div id="form1">
 <form enctype="multipart/form-data" action="" method="post" name="form1" >
-<?php echo getMultiLang('请选择文件');?>:<br>
-    <input type="hidden" class="sortType" id="sortType" name="sortType" value="<?php
-            echo $_REQUEST['sortType'] = isset($_REQUEST['sortType']) ? $_REQUEST['sortType'] : 'desc';
-        ?>" />
-            <input type="hidden" class="sortName" id="sortName" name="sortName" value="<?php
-            echo $_REQUEST['sortName'] = isset($_REQUEST['sortName']) ? $_REQUEST['sortName'] : '';
-        ?>" />
-        <input name="upload_file" type="file"><br>
-        <input type="submit" name="btnOrder" class="btnOrder" value="<?php echo getMultiLang('上传文件');?>">
+        <div class="choose1"><?php echo getMultiLang('请选择文件');?>:</div>
+            <input type="hidden" class="sortType" id="sortType" name="sortType" value="<?php echo $_REQUEST['sortType'] = isset($_REQUEST['sortType']) ? $_REQUEST['sortType'] : 'desc'; ?>" />
+            <input type="hidden" class="sortName" id="sortName" name="sortName" value="<?php echo $_REQUEST['sortName'] = isset($_REQUEST['sortName']) ? $_REQUEST['sortName'] : ''; ?>" />
+        <div class="file1"><input name="upload_file" class="upload_file" type="file"></div>
+        <div class="btn1"><input type="submit" name="btnOrder" class="btnOrder" value="<?php echo getMultiLang('上传文件');?>"></div>
 <!--        <iframe name="hidden_frame" id="hidden_frame"></iframe>-->
 </form>
-<br />
-<br />
-<br />
-<br />
+</div>
 <?php
 /**
  * 2.php
  *
  * @package    SimplePHPFile.
  * @subpackage UploadsDownload.
- * @author     rainysia <rainysia@gmail.com>
- * @copyright  2006-2013 Btroot.Team
- * @license    http://www.btroot.com/user_guide/license.html V1
+ * @author     yuliangx <yuliangx@jumei.com>
+ * @copyright  2006-2013 Jumei.xxx.Team
+ * @license    http://www.jumei.com/user_guide/license.html V1
  * @createTime 2013-11-12 16:57:54
  * @lastChange 2013-11-22 17:03:54
  */
@@ -144,17 +186,19 @@ if (isset($_REQUEST['sortType']) && !empty($_REQUEST['sortType'])) {
 } else {
     krsort($newArr);
 }
-echo '<a href="#" onClick="changeSortType();">'.getMultiLang("时间排序").'</a>&nbsp;&nbsp;&nbsp;&nbsp;';
-echo '<a href="#" onClick="changeSortByName();">'.getMultiLang("文件名排序").'</a>';
-echo '<hr />';
-echo '<table><tr><td>&nbsp;&nbsp;'.getMultiLang("下载链接").'</td><td>&nbsp;&nbsp;'.getMultiLang("上传时间").'</td><td>&nbsp;&nbsp;'.getMultiLang("大小").'</td></tr>';
+echo '<div id="typeAll">';
+    echo '<div class="type1" style="margin:0 20px 0 0px;float:left;"><a class="a1" href="#" onClick="changeSortByName();"><span>'.getMultiLang("文件名排序").'</span></a></div>';
+    echo '<div class="type2" style="margin:0 20px 0 574px;"><a class="a2" href="#" onClick="changeSortType();" style=""><span>'.getMultiLang("时间排序").'</span></a></div>';
+    echo '<div class="hr1"></div>';
+    echo '</div>';
+    echo '<p style="clear:both;"></p>';
+echo '<div id="table1"><table><tr><th class="th1">'.getMultiLang("下载链接").'</th><th class="th2">'.getMultiLang("上传时间").'</th><th class="th3">'.getMultiLang("大小").'</th></tr>';
 foreach ($newArr as $r => $t) {
     $d_root_no = strlen($d_root);
     $l = substr($t, $d_root_no);
-    echo '<tr><td>&nbsp;&nbsp;<a class="download_url" style="color:#01BCC8;text-decoration:none;font-size:16px;font-weight:bold;" href="'.$l.'">'.substr($l, strlen($storeDirName) + 3).'<a/></td><td>&nbsp;&nbsp;'.date('Y-m-d H:i:s', $r).'</td><td>&nbsp;&nbsp;'.getFileSize($t).'</td></tr>';
+    echo '<tr><td><span style="display:block;width:570px;height:24px;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;"><a class="download_url" href="'.$l.'">'.substr($l, strlen($storeDirName) + 3).'<a/></span></td><td><span style="display:block;width:180px;">'.date('Y-m-d H:i:s', $r).'</span></td><td>'.getFileSize($t).'</td></tr>';
 }
-echo '</table>';
-echo '<hr />';
+echo '</table></div>';
 $upload_file = isset($_FILES['upload_file']['tmp_name']) ? $_FILES['upload_file']['tmp_name'] : '';
 $upload_file_name = isset($_FILES['upload_file']['name']) ? $_FILES['upload_file']['name'] : '';
 $upload_file_size = isset($_FILES['upload_file']['size']) ? $_FILES['upload_file']['size'] : '';

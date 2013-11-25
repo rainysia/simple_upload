@@ -1,134 +1,320 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
-	<meta name="author" content="xyl" />
-	<title>简易文件上传</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+    <meta name="author" content="xyl" />
+    <title><?php echo getMultiLang('简易文件上传');?></title>
 </head>
 <style type="text/css">
 </style>
 <body>
-<form enctype="multipart/form-data" action="" method="post">
-请选择文件： <br>
-	<input name="upload_file" type="file"><br>
-	<input type="submit" value="上传文件">
+<form enctype="multipart/form-data" action="" method="post" name="form1" >
+<?php echo getMultiLang('请选择文件');?>:<br>
+    <input type="hidden" class="sortType" id="sortType" name="sortType" value="<?php
+            echo $_REQUEST['sortType'] = isset($_REQUEST['sortType']) ? $_REQUEST['sortType'] : 'desc';
+        ?>" />
+            <input type="hidden" class="sortName" id="sortName" name="sortName" value="<?php
+            echo $_REQUEST['sortName'] = isset($_REQUEST['sortName']) ? $_REQUEST['sortName'] : '';
+        ?>" />
+        <input name="upload_file" type="file"><br>
+        <input type="submit" name="btnOrder" class="btnOrder" value="<?php echo getMultiLang('上传文件');?>">
+<!--        <iframe name="hidden_frame" id="hidden_frame"></iframe>-->
 </form>
 <br />
 <br />
 <br />
 <br />
-<?
-/*
- * uploads.php
- * @name:       simeple php file upload && download tool
- * @author:     rainysia
- * @copyright:  Copyright (c) 2006 - 2013, BTROOT, Inc.
- * @version:    Version 1.0
- * @createTime: 2013-09-17 23:31:02
- * @lastChange: 2013-10-17 15:55:40
+<?php
+/**
+ * 2.php
+ *
+ * @package    SimplePHPFile.
+ * @subpackage UploadsDownload.
+ * @author     rainysia <rainysia@gmail.com>
+ * @copyright  2006-2013 Btroot.Team
+ * @license    http://www.btroot.com/user_guide/license.html V1
+ * @createTime 2013-11-12 16:57:54
+ * @lastChange 2013-11-22 17:03:54
  */
-function file_list($dir,$pattern=""){
-	$arr=array();
-	$dir_handle=opendir($dir);
-	if($dir_handle){
-		while(($file=readdir($dir_handle))!==false){
-			if($file==='.' || $file==='..'){
-				continue;
-			}
-			$tmp=realpath($dir.'/'.$file);
-			if(is_dir($tmp)){
-				$retArr=file_list($tmp,$pattern);
-				if(!empty($retArr)){
-					$arr[]=$retArr;
-				}
-			} else {
-				if($pattern==="" || preg_match($pattern,$tmp)){
-					$arr[]=$tmp;
-				}
-			}
-		}
-		closedir($dir_handle);
-	}
-	return $arr;
+
+/**
+ * GetFileTree.
+ *
+ * @param string $path 路径.
+ *
+ * @return array
+ */
+function getFileTree($path)
+{
+    $tree = array();
+    $ctime = array();
+    $merge = array();
+    foreach (glob($path.'/*') as $single) {
+        if (is_dir($single)) {
+            $tree = array_merge($tree,getFileTree($single));
+        } else {
+            $tree[] = $single;
+            $ctime = date('Y-m-d H:i:s', filectime($single));
+            $merge[$ctime] = $single;
+        }
+    }
+    return $tree;
 }
+
 $d_root = $_SERVER['DOCUMENT_ROOT'];
-$store_dir = "$d_root/uploads/";// 上传文件的储存位置
+// 上传文件的储存位置
+$storeDirName = 'uploads';
+$store_dir = $d_root.DIRECTORY_SEPARATOR.$storeDirName.DIRECTORY_SEPARATOR;
 if (!is_dir($store_dir)) {
-	mkdir($store_dir,0777,true);
+        mkdir($store_dir,0777,true);
 }
-$file_arr = file_list($store_dir);
-foreach ($file_arr as $v=>$k) {
-	$d_root_no = strlen($d_root);
-	$l = substr($k,$d_root_no);
-	echo $v.'号文件下载地址为:&nbsp;&nbsp;<a class="download_url" style="color:#01BCC8;text-decoration:none;font-size:16px;font-weight:bold;" href="'.$l.'">'.$_SERVER['SERVER_ADDR'].$l.'<a/><br />';
-}
-$upload_file=isset($_FILES['upload_file']['tmp_name'])?$_FILES['upload_file']['tmp_name']:'';
-$upload_file_name=isset($_FILES['upload_file']['name'])?$_FILES['upload_file']['name']:'';
-$upload_file_size=isset($_FILES['upload_file']['size'])?$_FILES['upload_file']['size']:'';
-if($upload_file){
-	$file_size_max = 1000*1000*200;// 200M限制文件上传最大容量(bytes)
-	if (!is_dir($store_dir)) {
-		mkdir($store_dir,0777,true);
-	}
-	$accept_overwrite = 1;//是否允许覆盖相同文件
-	// 检查文件大小
-	if ($upload_file_size > $file_size_max) {
-		echo "对不起，你的文件容量大于规定";
-		exit;
-	}
-	// 检查读写文件
-	if (file_exists($store_dir . $upload_file_name) && !$accept_overwrite) {
-		echo "存在相同文件名的文件";
-		exit;
-	}
-	//复制文件到指定目录
-	if (!move_uploaded_file($upload_file,$store_dir.$upload_file_name)) {
-		echo "复制文件失败";
-		exit;
-	}
-}
-if (isset($_FILES['upload_file'])) {
-	echo "<p>你上传了文件:";
-	echo isset($_FILES['upload_file']['name'])?$_FILES['upload_file']['name']:'';
-	echo "<br>";
-	//客户端机器文件的原名称。
+$filePathArr = getFileTree($store_dir);
 
-	echo "文件的 MIME 类型为:";
-	echo isset($_FILES['upload_file']['type'])?$_FILES['upload_file']['type']:'';
-	//文件的 MIME 类型，需要浏览器提供该信息的支持，例如“image/gif”。
-	echo "<br>";
-
-	echo "上传文件大小:";
-	echo isset($_FILES['upload_file']['size'])?$_FILES['upload_file']['size']:'';
-	//已上传文件的大小，单位为字节。
-	echo "<br>";
-
-	echo "文件上传后被临时储存为:";
-	echo isset($_FILES['upload_file']['tmp_name'])?$_FILES['upload_file']['tmp_name']:'';
-	//文件被上传后在服务端储存的临时文件名。
-	$erroe = isset($_FILES['upload_file']['error'])?$_FILES['upload_file']['error']:'';
-	switch($erroe){
-	case 0:
-		echo "上传成功"; break;
-	case 1:
-		echo "上传的文件超过了 php.ini 中 upload_max_filesize 选项限制的值."; break;
-	case 2:
-		echo "上传文件的大小超过了 HTML 表单中 MAX_FILE_SIZE 选项指定的值。"; break;
-	case 3:
-		echo "文件只有部分被上传"; break;
-	case 4:
-		echo "没有文件被上传"; break;
-	case 6:
-		echo "没有缓存目录"; break;
-	case 7:
-		echo "上传目录不可读"; break;
-	case 8:
-		echo "上传停止"; break;
-	default :
-		echo "没有选择上传文件"; break;
-	}
-	echo "<script language=JavaScript>location.replace(location.href);</script>";
+/**
+ * GetFileSize.
+ *
+ * @param string $file 文件路径.
+ *
+ * @return string.
+ */
+function getFileSize($file)
+{
+    $filesize = filesize($file);
+    if ($filesize >= 1073741824) {
+        $filesize = round($filesize / 1073741824 * 100) / 100 . ' gb';
+    } elseif ($filesize >= 1048576) {
+        $filesize = round($filesize / 1048576 * 100) / 100 . ' mb';
+    } elseif ($filesize >= 1024) {
+        $filesize = round($filesize / 1024 * 100) / 100 . ' kb';
+    } else {
+        $filesize = $filesize. ' b';
+    }
+    return $filesize;
 }
+
+/**
+ * DeleteArrayValue.
+ *
+ * @param array  $arr Comments.
+ * @param string $var Comments.
+ *
+ * @return array.
+ */
+function arrayRemoveValue(&$arr, $var)
+{
+    foreach ($arr as $key => $value) {
+        if (is_array($value)) {
+            arrayRemoveValue($arr[$key], $var);
+        } else {
+            $value = trim($value);
+            if ($value === $var) {
+                unset($arr[$key]);
+            } else {
+                $arr[$key] = $value;
+            }
+        }
+    }
+}
+
+$ctime = array();
+$fileNewArr = array();
+foreach ($filePathArr as $k => $v) {
+    $ctime[] = filectime($v);
+    $fileNewArr[] = $v;
+}
+$newArr = array_combine($ctime, $fileNewArr);
+if (isset($_REQUEST['sortType']) && !empty($_REQUEST['sortType'])) {
+    if (empty($_REQUEST['sortName'])) {
+        unset($_REQUEST['sortName']);
+    }
+    if ($_REQUEST['sortType'] == 'asc') {
+        ksort($newArr);
+    } elseif ($_REQUEST['sortType'] == 'desc') {
+        krsort($newArr);
+    }
+} elseif (isset($_REQUEST['sortName'])) {
+    if (empty($_REQUEST['sortType'])) {
+        unset($_REQUEST['sortType']);
+    }
+    if ($_REQUEST['sortName'] == 'az') {
+        asort($newArr);
+    } elseif ($_REQUEST['sortName'] == 'za') {
+        arsort($newArr);
+    }
+} else {
+    krsort($newArr);
+}
+echo '<a href="#" onClick="changeSortType();">'.getMultiLang("时间排序").'</a>&nbsp;&nbsp;&nbsp;&nbsp;';
+echo '<a href="#" onClick="changeSortByName();">'.getMultiLang("文件名排序").'</a>';
+echo '<hr />';
+echo '<table><tr><td>&nbsp;&nbsp;'.getMultiLang("下载链接").'</td><td>&nbsp;&nbsp;'.getMultiLang("上传时间").'</td><td>&nbsp;&nbsp;'.getMultiLang("大小").'</td></tr>';
+foreach ($newArr as $r => $t) {
+    $d_root_no = strlen($d_root);
+    $l = substr($t, $d_root_no);
+    echo '<tr><td>&nbsp;&nbsp;<a class="download_url" style="color:#01BCC8;text-decoration:none;font-size:16px;font-weight:bold;" href="'.$l.'">'.substr($l, strlen($storeDirName) + 3).'<a/></td><td>&nbsp;&nbsp;'.date('Y-m-d H:i:s', $r).'</td><td>&nbsp;&nbsp;'.getFileSize($t).'</td></tr>';
+}
+echo '</table>';
+echo '<hr />';
+$upload_file = isset($_FILES['upload_file']['tmp_name']) ? $_FILES['upload_file']['tmp_name'] : '';
+$upload_file_name = isset($_FILES['upload_file']['name']) ? $_FILES['upload_file']['name'] : '';
+$upload_file_size = isset($_FILES['upload_file']['size']) ? $_FILES['upload_file']['size'] : '';
+if ($upload_file) {
+    // 2000M限制文件上传最大容量(bytes)
+    $file_size_max = 1000 * 1000 * 1000 * 2;
+    if (!is_dir($store_dir)) {
+        mkdir($store_dir,0777,true);
+    }
+    // 是否允许覆盖相同文件
+    $accept_overwrite = 1;
+    // 检查文件大小
+    if ($upload_file_size > $file_size_max) {
+        echo "对不起，你的文件容量大于规定";
+        exit;
+    }
+    // 检查读写文件
+    if (file_exists($store_dir . $upload_file_name) && !$accept_overwrite) {
+        echo "存在相同文件名的文件";
+        exit;
+    }
+    // 复制文件到指定目录
+    if (!move_uploaded_file($upload_file,$store_dir.$upload_file_name)) {
+        echo "复制文件失败";
+        exit;
+    }
+}
+if (isset($_FILES['upload_file']) && !empty($_FILES['upload_file']['name'])) {
+    echo "<p>你上传了文件:";
+    echo isset($_FILES['upload_file']['name']) ? $_FILES['upload_file']['name'] : '';
+    echo "<br>";
+    // 客户端机器文件的原名称。
+
+    echo "文件的 MIME 类型为:";
+    echo isset($_FILES['upload_file']['type']) ? $_FILES['upload_file']['type'] : '';
+    // 文件的 MIME 类型，需要浏览器提供该信息的支持，例如“image/gif”。
+    echo "<br>";
+
+    echo "上传文件大小:";
+    echo isset($_FILES['upload_file']['size']) ? $_FILES['upload_file']['size'] : '';
+    // 已上传文件的大小，单位为字节。
+    echo "<br>";
+
+    echo "文件上传后被临时储存为:";
+    echo isset($_FILES['upload_file']['tmp_name']) ? $_FILES['upload_file']['tmp_name'] : '';
+    // 文件被上传后在服务端储存的临时文件名。
+    $erroe = isset($_FILES['upload_file']['error']) ? $_FILES['upload_file']['error'] : '';
+    switch($erroe){
+        case 0:
+            echo "上传成功";
+            break;
+        case 1:
+            echo "上传的文件超过了 php.ini 中 upload_max_filesize 选项限制的值.";
+            break;
+        case 2:
+            echo "上传文件的大小超过了 HTML 表单中 MAX_FILE_SIZE 选项指定的值。";
+            break;
+        case 3:
+            echo "文件只有部分被上传";
+            break;
+        case 4:
+            echo "没有文件被上传";
+            break;
+        case 6:
+            echo "没有缓存目录";
+            break;
+        case 7:
+            echo "上传目录不可读";
+            break;
+        case 8:
+            echo "上传停止";
+            break;
+        default:
+            echo "没有选择上传文件";
+            break;
+    }
+    echo "<script language=JavaScript>location.replace(location.href);</script>";
+}
+
+/**
+ * 多语言函数.
+ *
+ * @param string $key 语言内容.
+ *
+ * @return string.
+ */
+function getMultiLang($key)
+{
+    // 定义语言数组
+    $langArr = array(
+        'key' => '值',
+        'SimpleFileUploadAndDownload' => '简易文件上传',
+        'PleaseChooseFile' => '请选择文件',
+        'Upload' => '上传文件',
+        'Download' => '下载链接',
+        'Upload Time' => '上传时间',
+        'Size' => '大小',
+        'Sort by Time' => '时间排序',
+        'ASC' => '顺序',
+        'DESC' => '倒序',
+        'asc' => '顺序',
+        'desc' => '倒序',
+        'Sort by Name' => '文件名排序'
+
+    );
+    // 中文.UTF-8, GBK \x80-\xff GB2312 \xa1-\xff
+    $zhLang = preg_match("/^[\{4e00}-\x{9fa5}]+$/u", $key);
+    // 英文.
+    $enLang = preg_match("/^[a-zA-Z]+$/u", $key);
+    // 判断浏览器语言
+    $browserLang = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 4);
+    if (preg_match("/zh-c/i", $browserLang)) {
+        // echo '简体中文';
+        if ($zhLang) {
+            return $key;
+        } else {
+            if (in_array($key, $langArr)) {
+                return $langArr[$key];
+            } else {
+                return 'NULL ZH';
+            }
+        }
+    } elseif (preg_match("/en/i", $browserLang)) {
+        // echo '英文';
+        if ($enLang) {
+            return $key;
+        } else {
+            if (in_array($key, $langArr)) {
+                return array_search($key, $langArr);
+            } else {
+                return 'NULL EN';
+            }
+        }
+    }
+}
+
 ?>
+<script type="text/javascript" charset="utf-8">
+function changeSortType(){
+    var sortType = document.getElementById("sortType").value;
+    if (sortType == 'desc') {
+        document.getElementById("sortName").value = null;
+        document.getElementById("sortType").value = "asc";
+    } else {
+        document.getElementById("sortName").value = null;
+        document.getElementById("sortType").value = "desc";
+    }
+    document.all("btnOrder").click();
+}
+function changeSortByName(){
+    var sortName = document.getElementById("sortName").value;
+    if (sortName == 'az') {
+        document.getElementById("sortType").value = null;
+        document.getElementById("sortName").value = "za";
+    } else {
+        document.getElementById("sortType").value = null;
+        document.getElementById("sortName").value = "az";
+    }
+    document.all("btnOrder").click();
+}
+</script>
 </body>
 </html>

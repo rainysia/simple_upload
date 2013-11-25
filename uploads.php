@@ -72,11 +72,11 @@ a:hover {color:red;text-decoration:underline;}
  *
  * @package    SimplePHPFile.
  * @subpackage UploadsDownload.
- * @author     yuliangx <yuliangx@jumei.com>
- * @copyright  2006-2013 Jumei.xxx.Team
- * @license    http://www.jumei.com/user_guide/license.html V1
+ * @author     rainysia <rainysia@gmail.com>
+ * @copyright  2006-2013 btroot.Team
+ * @license    http://www.btroot.com/user_guide/license.html V1
  * @createTime 2013-11-12 16:57:54
- * @lastChange 2013-11-22 17:03:54
+ * @lastChange 2013-11-25 15:58:54
  */
 
 /**

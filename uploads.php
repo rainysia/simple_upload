@@ -50,10 +50,13 @@ a:hover {color:red;text-decoration:underline;}
 }
 #table1 {margin:0px 0 0 50px;}
 #table1 th {text-align:left;margin-bottom:20px;}
+#table1 .th_no {text-align:center;}
 #table1 th .th1 {display:block;padding-bottom:10px;text-align:left;margin-left:10px;}
 #table1 th .th2 {display:block;padding-bottom:10px;text-align:left;}
 #table1 tr td span a {color:#3a3a3a;text-decoration:none;font-size:14px;font-weight:none;}
 #table1 tr td span a:hover {color:#ED145B;text-decoration:underline;font-size:14px;font-weight:bold;}
+#tbody1 .td_no {color:rgba(237,20,91,.85);text-align:center}
+#tbody1 .td_content {padding-top:2px;}
 </style>
 <body>
 <div id="form1">
@@ -68,15 +71,15 @@ a:hover {color:red;text-decoration:underline;}
 </div>
 <?php
 /**
- * 2.php
+ * Uploads.php
  *
  * @package    SimplePHPFile.
  * @subpackage UploadsDownload.
- * @author     rainysia <rainysia@gmail.com>
- * @copyright  2006-2013 btroot.Team
- * @license    http://www.btroot.com/user_guide/license.html V1
+ * @author     yuliangx <yuliangx@jumei.com>
+ * @copyright  2006-2013 Jumei.xxx.Team
+ * @license    http://www.jumei.com/user_guide/license.html V1
  * @createTime 2013-11-12 16:57:54
- * @lastChange 2013-11-25 15:58:54
+ * @lastChange 2013-12-18 10:49:25
  */
 
 /**
@@ -188,17 +191,17 @@ if (isset($_REQUEST['sortType']) && !empty($_REQUEST['sortType'])) {
 }
 echo '<div id="typeAll">';
     echo '<div class="type1" style="margin:0 20px 0 0px;float:left;"><a class="a1" href="#" onClick="changeSortByName();"><span>'.getMultiLang("文件名排序").'</span></a></div>';
-    echo '<div class="type2" style="margin:0 20px 0 574px;"><a class="a2" href="#" onClick="changeSortType();" style=""><span>'.getMultiLang("时间排序").'</span></a></div>';
+    echo '<div class="type2" style="margin:0 20px 0 600px;"><a class="a2" href="#" onClick="changeSortType();" style=""><span>'.getMultiLang("时间排序").'</span></a></div>';
     echo '<div class="hr1"></div>';
     echo '</div>';
     echo '<p style="clear:both;"></p>';
-echo '<div id="table1"><table><tr><th class="th1">'.getMultiLang("下载链接").'</th><th class="th2">'.getMultiLang("上传时间").'</th><th class="th3">'.getMultiLang("大小").'</th></tr>';
+echo '<div id="table1"><table><tr><th class="th_no" style="width:40px;">'.getMultiLang("序号").'</th><th class="th1">'.getMultiLang("下载链接").'</th><th class="th2">'.getMultiLang("上传时间").'</th><th class="th3">'.getMultiLang("大小").'</th></tr><tbody id="tbody1">';
 foreach ($newArr as $r => $t) {
     $d_root_no = strlen($d_root);
     $l = substr($t, $d_root_no);
-    echo '<tr><td><span style="display:block;width:570px;height:24px;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;"><a class="download_url" href="'.$l.'">'.substr($l, strlen($storeDirName) + 3).'<a/></span></td><td><span style="display:block;width:180px;">'.date('Y-m-d H:i:s', $r).'</span></td><td>'.getFileSize($t).'</td></tr>';
+    echo '<tr><td class="td_no"></td><td class="td_content"><span style="display:block;width:570px;height:18px;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;"><a class="download_url" href="'.$l.'">'.substr($l, strlen($storeDirName) + 3).'<a/></span></td><td><span style="display:block;width:180px;">'.date('Y-m-d H:i:s', $r).'</span></td><td>'.getFileSize($t).'</td></tr>';
 }
-echo '</table></div>';
+echo '</tbody></table></div>';
 $upload_file = isset($_FILES['upload_file']['tmp_name']) ? $_FILES['upload_file']['tmp_name'] : '';
 $upload_file_name = isset($_FILES['upload_file']['name']) ? $_FILES['upload_file']['name'] : '';
 $upload_file_size = isset($_FILES['upload_file']['size']) ? $_FILES['upload_file']['size'] : '';
@@ -301,7 +304,8 @@ function getMultiLang($key)
         'DESC' => '倒序',
         'asc' => '顺序',
         'desc' => '倒序',
-        'Sort by Name' => '文件名排序'
+        'Sort by Name' => '文件名排序',
+        'No' => '序号'
 
     );
     // 中文.UTF-8, GBK \x80-\xff GB2312 \xa1-\xff
@@ -337,6 +341,15 @@ function getMultiLang($key)
 
 ?>
 <script type="text/javascript" charset="utf-8">
+window.onload = function(){
+    var oTable = document.getElementById("tbody1");
+    for(var i=0;i<oTable.rows.length;i++){
+        oTable.rows[i].cells[0].innerHTML = (i+1);
+        if(i%2==0){
+            oTable.rows[i].className = "td_no1";
+        }  //偶数行
+    }
+}
 function changeSortType(){
     var sortType = document.getElementById("sortType").value;
     if (sortType == 'desc') {

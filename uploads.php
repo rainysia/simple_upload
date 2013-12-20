@@ -79,7 +79,7 @@ a:hover {color:red;text-decoration:underline;}
  * @copyright  2006-2013 Jumei.xxx.Team
  * @license    http://www.jumei.com/user_guide/license.html V1
  * @createTime 2013-11-12 16:57:54
- * @lastChange 2013-12-18 10:49:25
+ * @lastChange 2013-12-20 16:21:37
  */
 
 /**
@@ -161,6 +161,11 @@ function arrayRemoveValue(&$arr, $var)
     }
 }
 
+ini_set('upload_max_filesize', '2048M');
+ini_set('post_max_size', '2048M');
+ini_set('max_input_time', '600');
+ini_set('max_execution_time', '600');
+ini_set('memory_limit', '-1');
 $ctime = array();
 $fileNewArr = array();
 foreach ($filePathArr as $k => $v) {

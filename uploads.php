@@ -168,9 +168,11 @@ ini_set('max_execution_time', '600');
 ini_set('memory_limit', '-1');
 $ctime = array();
 $fileNewArr = array();
+$mc = 1;
 foreach ($filePathArr as $k => $v) {
-    $ctime[] = filectime($v);
+    $ctime[] = filectime($v)+$mc;
     $fileNewArr[] = $v;
+    $mc++;
 }
 $newArr = array_combine($ctime, $fileNewArr);
 if (isset($_REQUEST['sortType']) && !empty($_REQUEST['sortType'])) {

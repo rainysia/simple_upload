@@ -28,11 +28,11 @@ a:hover {color:red;text-decoration:underline;}
     -webkit-box-shadown:0 0 .1em rgba(0,0,0,0.4);
 }
 #form1 {padding:10px 0 10px 20px;
-    background:#FFE7EF;
-    background:-moz-linear-gradient(top,#FFDAE5,#FFFFFF);
-    background:-o-linear-gradient(top,#FFDAE5,#FFFFFF);
-    background:-webkit-gradient(linear, 0 0, 0 bottom, from(#FFDAE5), to(#FFFFFF));
-    filter:progid:DXImageTransform.Microsoft.gradient(startcolorstr=#FFDAE5,endcolorstr=#FFFFFF,gradientType=0);
+    background:#DAFFEE;
+    background:-moz-linear-gradient(top,#DAFFEE,#FFFFFF);
+    background:-o-linear-gradient(top,#DAFFEE,#FFFFFF);
+    background:-webkit-gradient(linear, 0 0, 0 bottom, from(#DAFFEE), to(#FFFFFF));
+    filter:progid:DXImageTransform.Microsoft.gradient(startcolorstr=#DAFFEE,endcolorstr=#FFFFFF,gradientType=0);
     *zoom:1;
 }
 #form1 .choose1 {margin:0 0 0 20px;}
@@ -40,12 +40,12 @@ a:hover {color:red;text-decoration:underline;}
 #form1 .btn1 {margin:0px 0 0 30px;}
 #form1 .btn1 input {padding:0 4px 0 4px;}
 #typeAll {padding:10px 0px 0px 50px;}
-#typeAll .hr1 {width:85%;height:5px;margin:2px 2px 2px 0;background:rgba(237,20,91,.85)!important;
+#typeAll .hr1 {width:85%;height:5px;margin:2px 2px 2px 0;background:rgba(21, 121, 64, 0.85)!important;
 	-moz-box-shadow:0px 0px 1px #c3c3c3;
 	-webkit-box-shadow:0px 0px 1px #c3c3c3;
     -box-shadow:0px 0px 1px #c3c3c3;}
 #typeAll a {text-decoration:none;font-weight:bold;font-size:18px;color:#000000;}
-#typeAll a:hover {text-decoration:underline;color:#ED145B;font-size:18px;}
+#typeAll a:hover {text-decoration:underline;color:#277C5F;font-size:18px;}
 .table1tr1 {display:block;background:#909090;color:#FFFFFF;width:85%;margin-bottom:5px;
 }
 #table1 {margin:0px 0 0 50px;}
@@ -54,8 +54,8 @@ a:hover {color:red;text-decoration:underline;}
 #table1 th .th1 {display:block;padding-bottom:10px;text-align:left;margin-left:10px;}
 #table1 th .th2 {display:block;padding-bottom:10px;text-align:left;}
 #table1 tr td span a {color:#3a3a3a;text-decoration:none;font-size:14px;font-weight:none;}
-#table1 tr td span a:hover {color:#ED145B;text-decoration:underline;font-size:14px;font-weight:bold;}
-#tbody1 .td_no {color:rgba(237,20,91,.85);text-align:center}
+#table1 tr td span a:hover {color:#277C5F;text-decoration:underline;font-size:14px;font-weight:bold;}
+#tbody1 .td_no {color:rgba(6, 105, 64, 0.85);text-align:center}
 #tbody1 .td_content {padding-top:2px;}
 </style>
 <body>
@@ -76,10 +76,10 @@ a:hover {color:red;text-decoration:underline;}
  * @package    SimplePHPFile.
  * @subpackage UploadsDownload.
  * @author     yuliangx <yuliangx@jumei.com>
- * @copyright  2006-2013 Jumei.xxx.Team
- * @license    http://www.jumei.com/user_guide/license.html V1
+ * @copyright  2006-2015 SNX.Team
+ * @license    http://www.btroot.com/user_guide/license.html V1
  * @createTime 2013-11-12 16:57:54
- * @lastChange 2013-12-20 16:21:37
+ * @lastChange 2015-06-01 10:30:14
  */
 
 /**

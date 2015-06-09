@@ -75,7 +75,7 @@ a:hover {color:red;text-decoration:underline;}
  *
  * @package    SimplePHPFile.
  * @subpackage UploadsDownload.
- * @author     yuliangx <yuliangx@jumei.com>
+ * @author     tommyx <admin@btroot.com>
  * @copyright  2006-2015 SNX.Team
  * @license    http://www.btroot.com/user_guide/license.html V1
  * @createTime 2013-11-12 16:57:54

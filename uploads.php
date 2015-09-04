@@ -53,6 +53,9 @@ a:hover {color:red;text-decoration:underline;}
 #table1 .th_no {text-align:center;}
 #table1 th .th1 {display:block;padding-bottom:10px;text-align:left;margin-left:10px;}
 #table1 th .th2 {display:block;padding-bottom:10px;text-align:left;}
+#table1 .td_del a {color: #DE7D8F; font-weight: bold;}
+#table1 .td_del a:hover {color: red; font-weight: bold;}
+
 #table1 tr td span a {color:#3a3a3a;text-decoration:none;font-size:14px;font-weight:none;}
 #table1 tr td span a:hover {color:#277C5F;text-decoration:underline;font-size:14px;font-weight:bold;}
 #tbody1 .td_no {color:rgba(6, 105, 64, 0.85);text-align:center}
@@ -111,7 +114,7 @@ $d_root = $_SERVER['DOCUMENT_ROOT'];
 $storeDirName = 'uploads';
 $store_dir = $d_root.DIRECTORY_SEPARATOR.$storeDirName.DIRECTORY_SEPARATOR;
 if (!is_dir($store_dir)) {
-        mkdir($store_dir,0777,true);
+    mkdir($store_dir, 0777, true);
 }
 $filePathArr = getFileTree($store_dir);
 
@@ -126,13 +129,13 @@ function getFileSize($file)
 {
     $filesize = filesize($file);
     if ($filesize >= 1073741824) {
-        $filesize = round($filesize / 1073741824 * 100) / 100 . ' gb';
+        $filesize = round($filesize / 1073741824 * 100) / 100 . ' GB';
     } elseif ($filesize >= 1048576) {
-        $filesize = round($filesize / 1048576 * 100) / 100 . ' mb';
+        $filesize = round($filesize / 1048576 * 100) / 100 . ' MB';
     } elseif ($filesize >= 1024) {
-        $filesize = round($filesize / 1024 * 100) / 100 . ' kb';
+        $filesize = round($filesize / 1024 * 100) / 100 . ' kB';
     } else {
-        $filesize = $filesize. ' b';
+        $filesize = $filesize. ' B';
     }
     return $filesize;
 }
@@ -175,6 +178,21 @@ foreach ($filePathArr as $k => $v) {
     $mc++;
 }
 $newArr = array_combine($ctime, $fileNewArr);
+$admin_del_arr = array('tommyx', 'nicolasz', 'synnex');
+$del_privilege = false;
+if (isset($_REQUEST['user']) && in_array($_REQUEST['user'],  $admin_del_arr)) {
+    $del_privilege = true;
+}
+if (isset($_REQUEST['del_file']) && !empty($_REQUEST['del_file'])) {
+    try {
+        unlink($_REQUEST['del_file']);
+        unset($_REQUEST['del_file']);
+        echo '<script type="text/javascript" charset="utf-8">location.replace("'.$_SERVER['HTTP_REFERER'].'")</script>';
+        exit();
+    } catch ( Exception $e) {
+        echo $e->getMessage();
+    }
+}
 if (isset($_REQUEST['sortType']) && !empty($_REQUEST['sortType'])) {
     if (empty($_REQUEST['sortName'])) {
         unset($_REQUEST['sortName']);
@@ -202,11 +220,19 @@ echo '<div id="typeAll">';
     echo '<div class="hr1"></div>';
     echo '</div>';
     echo '<p style="clear:both;"></p>';
-echo '<div id="table1"><table><tr><th class="th_no" style="width:40px;">'.getMultiLang("序号").'</th><th class="th1">'.getMultiLang("下载链接").'</th><th class="th2">'.getMultiLang("上传时间").'</th><th class="th3">'.getMultiLang("大小").'</th></tr><tbody id="tbody1">';
+if ($del_privilege == true) {
+    echo '<div id="table1"><table><tr><th class="th_no" style="width:40px;">'.getMultiLang("序号").'</th><th class="th1">'.getMultiLang("下载链接").'</th><th class="th2">'.getMultiLang("上传时间").'</th><th class="th3">'.getMultiLang("大小").'</th><th class="th4">'.getMultiLang("删除").'</th></tr><tbody id="tbody1">';
+} else {
+    echo '<div id="table1"><table><tr><th class="th_no" style="width:40px;">'.getMultiLang("序号").'</th><th class="th1">'.getMultiLang("下载链接").'</th><th class="th2">'.getMultiLang("上传时间").'</th><th class="th3">'.getMultiLang("大小").'</th></tr><tbody id="tbody1">';
+}
 foreach ($newArr as $r => $t) {
     $d_root_no = strlen($d_root);
     $l = substr($t, $d_root_no);
-    echo '<tr><td class="td_no"></td><td class="td_content"><span style="display:block;width:570px;height:18px;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;"><a class="download_url" href="'.$l.'">'.substr($l, strlen($storeDirName) + 3).'<a/></span></td><td><span style="display:block;width:180px;">'.date('Y-m-d H:i:s', $r).'</span></td><td>'.getFileSize($t).'</td></tr>';
+    if (is_file($t) && $del_privilege == true) {
+        echo '<tr><td class="td_no"></td><td class="td_content"><span style="display:block;width:570px;height:18px;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;"><a class="download_url" href="'.$l.'">'.substr($l, strlen($storeDirName) + 3).'</a></span></td><td><span style="display:block;width:180px;">'.date('Y-m-d H:i:s', $r).'</span></td><td>'.getFileSize($t).'</td><td class="td_del"><a href="?del_file='.$t.'">DELETE</a></td></tr>';
+    } else {
+        echo '<tr><td class="td_no"></td><td class="td_content"><span style="display:block;width:570px;height:18px;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;"><a class="download_url" href="'.$l.'">'.substr($l, strlen($storeDirName) + 3).'</a></span></td><td><span style="display:block;width:180px;">'.date('Y-m-d H:i:s', $r).'</span></td><td>'.getFileSize($t).'</td></tr>';
+    }
 }
 echo '</tbody></table></div>';
 $upload_file = isset($_FILES['upload_file']['tmp_name']) ? $_FILES['upload_file']['tmp_name'] : '';
@@ -312,7 +338,8 @@ function getMultiLang($key)
         'asc' => '顺序',
         'desc' => '倒序',
         'Sort by Name' => '文件名排序',
-        'No' => '序号'
+        'No' => '序号',
+        'Action' => '删除'
 
     );
     // 中文.UTF-8, GBK \x80-\xff GB2312 \xa1-\xff

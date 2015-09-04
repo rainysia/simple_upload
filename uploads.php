@@ -178,7 +178,7 @@ foreach ($filePathArr as $k => $v) {
     $mc++;
 }
 $newArr = array_combine($ctime, $fileNewArr);
-$admin_del_arr = array('tommyx', 'nicolasz', 'synnex');
+$admin_del_arr = array('tommyx', 'superadmin');
 $del_privilege = false;
 if (isset($_REQUEST['user']) && in_array($_REQUEST['user'],  $admin_del_arr)) {
     $del_privilege = true;

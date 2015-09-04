@@ -78,7 +78,7 @@ a:hover {color:red;text-decoration:underline;}
  *
  * @package    SimplePHPFile.
  * @subpackage UploadsDownload.
- * @author     yuliangx <rainysia@gmail.com>
+ * @author     rainysia <rainysia@gmail.com>
  * @copyright  2006-2013 DEV.xxx.Team
  * @license    http://www.wikipedia.org/user_guide/license.html V1
  * @createTime 2013-11-12 16:57:54
@@ -116,7 +116,7 @@ $store_dir = $d_root.DIRECTORY_SEPARATOR.$storeDirName.DIRECTORY_SEPARATOR;
 if (!is_dir($store_dir)) {
     mkdir($store_dir, 0777, true);
 }
-$admin_del_arr = array('tommyx', 'superadmin');
+$admin_del_arr = array('tommyx', 'superadmin', 'synnex', 'hyve');
 $filePathArr = getFileTree($store_dir);
 
 /**
@@ -185,12 +185,25 @@ if (isset($_REQUEST['user']) && in_array($_REQUEST['user'],  $admin_del_arr)) {
 }
 if (isset($_REQUEST['del_file']) && !empty($_REQUEST['del_file'])) {
     try {
-        unlink($_REQUEST['del_file']);
-        unset($_REQUEST['del_file']);
-        echo '<script type="text/javascript" charset="utf-8">location.replace("'.$_SERVER['HTTP_REFERER'].'")</script>';
-        exit();
+        if (is_file($_REQUEST['del_file'])) {
+            if (strpos($_REQUEST['del_file'], $store_dir, 0) === 0) {
+                unlink($_REQUEST['del_file']);
+                unset($_REQUEST['del_file']);
+                echo 'Delete '.$_REQUEST['del_file'].' successful!<br />';
+                echo '<script type="text/javascript" charset="utf-8">location.replace("'.$_SERVER['HTTP_REFERER'].'")</script>';
+                exit();
+            } else {
+                echo 'Can\'t delete others file, System permission deny!</br >';
+                echo '<script type="text/javascript" charset="utf-8">location.replace("'.$_SERVER['SCRIPT_NAME'].'")</script>';
+                exit();
+            }
+        } else {
+            echo '<span style="margin-left:50px;">'.$_REQUEST['del_file'].' is not a real file.<br />';
+        }
     } catch ( Exception $e) {
         echo $e->getMessage();
+        echo '<script type="text/javascript" charset="utf-8">location.replace("'.$_SERVER['HTTP_REFERER'].'")</script>';
+        exit();
     }
 }
 if (isset($_REQUEST['sortType']) && !empty($_REQUEST['sortType'])) {

@@ -116,6 +116,7 @@ $store_dir = $d_root.DIRECTORY_SEPARATOR.$storeDirName.DIRECTORY_SEPARATOR;
 if (!is_dir($store_dir)) {
     mkdir($store_dir, 0777, true);
 }
+$admin_del_arr = array('tommyx', 'superadmin');
 $filePathArr = getFileTree($store_dir);
 
 /**
@@ -178,7 +179,6 @@ foreach ($filePathArr as $k => $v) {
     $mc++;
 }
 $newArr = array_combine($ctime, $fileNewArr);
-$admin_del_arr = array('tommyx', 'superadmin');
 $del_privilege = false;
 if (isset($_REQUEST['user']) && in_array($_REQUEST['user'],  $admin_del_arr)) {
     $del_privilege = true;

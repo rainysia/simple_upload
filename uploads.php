@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
-    <meta name="author" content="xyl" />
+    <meta name="author" content="tommyx" />
     <title><?php echo getMultiLang('简易文件上传');?></title>
 </head>
 <style type="text/css">
@@ -78,11 +78,11 @@ a:hover {color:red;text-decoration:underline;}
  *
  * @package    SimplePHPFile.
  * @subpackage UploadsDownload.
- * @author     tommyx <admin@btroot.com>
- * @copyright  2006-2015 SNX.Team
- * @license    http://www.btroot.com/user_guide/license.html V1
+ * @author     yuliangx <rainysia@gmail.com>
+ * @copyright  2006-2013 DEV.xxx.Team
+ * @license    http://www.wikipedia.org/user_guide/license.html V1
  * @createTime 2013-11-12 16:57:54
- * @lastChange 2015-06-01 10:30:14
+ * @lastChange 2015-09-04 13:21:37
  */
 
 /**

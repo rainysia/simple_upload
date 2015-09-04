@@ -53,7 +53,7 @@ a:hover {color:red;text-decoration:underline;}
 #table1 .th_no {text-align:center;}
 #table1 th .th1 {display:block;padding-bottom:10px;text-align:left;margin-left:10px;}
 #table1 th .th2 {display:block;padding-bottom:10px;text-align:left;}
-#table1 .td_del a {color: #DE7D8F; font-weight: bold;}
+#table1 .td_del a {color: #489A6B; font-weight: bold;}
 #table1 .td_del a:hover {color: red; font-weight: bold;}
 
 #table1 tr td span a {color:#3a3a3a;text-decoration:none;font-size:14px;font-weight:none;}

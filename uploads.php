@@ -116,7 +116,7 @@ $store_dir = $d_root.DIRECTORY_SEPARATOR.$storeDirName.DIRECTORY_SEPARATOR;
 if (!is_dir($store_dir)) {
     mkdir($store_dir, 0777, true);
 }
-$admin_del_arr = array('tommyx', 'superadmin', 'synnex', 'hyve');
+$admin_del_arr = array('tommyx', 'superadmin');
 $filePathArr = getFileTree($store_dir);
 
 /**

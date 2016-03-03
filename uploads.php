@@ -187,9 +187,10 @@ if (isset($_REQUEST['del_file']) && !empty($_REQUEST['del_file'])) {
     try {
         if (is_file($_REQUEST['del_file'])) {
             if (strpos($_REQUEST['del_file'], $store_dir, 0) === 0) {
+                $_del_tmp_file = $_REQUEST['del_file'];
                 unlink($_REQUEST['del_file']);
                 unset($_REQUEST['del_file']);
-                echo 'Delete '.$_REQUEST['del_file'].' successful!<br />';
+                echo 'Delete '.$_del_tmp_file.' successful!<br />';
                 echo '<script type="text/javascript" charset="utf-8">location.replace("'.$_SERVER['HTTP_REFERER'].'")</script>';
                 exit();
             } else {

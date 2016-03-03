@@ -9,20 +9,37 @@ Usage
 
 There is including DB file, file list, file manager
 
->####uploads.php
->> http://ip or domain/uploads.php
+###uploads.php
+```
+http://ip or domain/uploads.php
+```
+![uploads.php](https://cloud.githubusercontent.com/assets/1259324/13483267/ea6aa5f0-e12d-11e5-8096-2d17480d405d.png)
 
->####adminer.php
->> http://ip or domain/adminer.php
 
->####file.php
->> http://ip or domain/file.php
+```
+http://ip or domain/uploads.php?user=superadmin
+```
+![uploads.php can delete](https://cloud.githubusercontent.com/assets/1259324/13483279/03fe57fa-e12e-11e5-877e-0af62cb7cc5a.png)
+
+
+###adminer.php
+
+```
+http://ip or domain/adminer.php
+```
+![adminer.php](https://cloud.githubusercontent.com/assets/1259324/13483259/e19efb10-e12d-11e5-9907-ad58c2ed7514.png)
+
+
+###file.php
+```
+http://ip or domain/file.php
+```
+![file.php](https://cloud.githubusercontent.com/assets/1259324/13483264/e67c7a40-e12d-11e5-976b-9552946f7d12.png)
 
 
 Contact
 ----------------------------------------
 <rainysia@gmail.com>
-
 
 
 Requirements
@@ -33,6 +50,6 @@ Requirements
 
 Update
 ----------------------------------------
-2015-05-12 14:59:04 add basic READ.md
-2015-06-01 10:50:58 add file.php
-2016-03-03 10:47:38 modify uploads.php
+2015-05-12 14:59:04 add basic READ.md<br />
+2015-06-01 10:50:58 add file.php<br />
+2016-03-03 10:47:38 modify uploads.php<br />

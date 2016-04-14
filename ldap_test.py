@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
+# need ldap3, ldap-utils package
 import os
 import sys
 import ldap

@@ -42,6 +42,7 @@ It will translate all chinese punctuation to english punctuation, run
 ./punctuation_cn_to_en.sh path[absolute path or relative path or filename]
 ```
 [**Chinese punctuation in Wikipedia**](https://zh.wikipedia.org/wiki/%E6%A0%87%E7%82%B9%E7%AC%A6%E5%8F%B7 "Wikipedia")
+![punc](https://cloud.githubusercontent.com/assets/1259324/15665993/dc4cc724-2740-11e6-9043-8e7ad7fb7879.png)
 
 
 Contact

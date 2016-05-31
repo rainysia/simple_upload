@@ -84,14 +84,24 @@ punctuation_en_arr[28]='_'
 
 replace_punctuation() {
     if [ ! -f $line ]; then
-        echo 'a1'
         exit 1
     else
-        for i in "${!punctuation_zh_arr[@]}"
-        do
-            sed -i "s/${punctuation_zh_arr[$i]}/${punctuation_en_arr[$i]}/g" $line
-        done
-        echo "punctuation translate done in $line"
+        if [ "$(uname)" == "Darwin" ]; then
+            for i in "${!punctuation_zh_arr[@]}"
+            do
+                sed -i '' "s/${punctuation_zh_arr[$i]}/${punctuation_en_arr[$i]}/g" $line
+            done
+        elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
+            for i in "${!punctuation_zh_arr[@]}"
+            do
+                sed -i "s/${punctuation_zh_arr[$i]}/${punctuation_en_arr[$i]}/g" $line
+            done
+        elif [ "$(expr substr $(uname -s) 1 10)" == "MINGW32_NT" ]; then
+            exit 1
+        else
+            exit 1
+        fi
+        echo "Punctuation translate done in $line"
     fi
 }
 

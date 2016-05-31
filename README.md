@@ -7,7 +7,7 @@ It's a php file ,you can use it upload file or download file from your web-serve
 Usage
 ----------------------------------------
 
-There is including DB file, file list, file manager
+There is including DB file, file list, file manager, shell scripts
 
 ###uploads.php
 ```
@@ -37,9 +37,11 @@ http://ip or domain/file.php
 ![file.php](https://cloud.githubusercontent.com/assets/1259324/13483264/e67c7a40-e12d-11e5-976b-9552946f7d12.png)
 
 ###punctuation_cn_to_en.sh
+It will translate all chinese punctuation to english punctuation, run 
 ```
-
+./punctuation_cn_to_en.sh path[absolute path or relative path or filename]
 ```
+[**Chinese punctuation in Wikipedia**](https://zh.wikipedia.org/wiki/%E6%A0%87%E7%82%B9%E7%AC%A6%E5%8F%B7 "Wikipedia")
 
 
 Contact

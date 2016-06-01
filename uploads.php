@@ -99,7 +99,7 @@ function getFileTree($path)
     $merge = array();
     foreach (glob($path.'/*') as $single) {
         if (is_dir($single)) {
-            $tree = array_merge($tree,getFileTree($single));
+            $tree = array_merge($tree, getFileTree($single));
         } else {
             $tree[] = $single;
             $ctime = date('Y-m-d H:i:s', filectime($single));
@@ -256,7 +256,7 @@ if ($upload_file) {
     // 2000M限制文件上传最大容量(bytes)
     $file_size_max = 1000 * 1000 * 1000 * 2;
     if (!is_dir($store_dir)) {
-        mkdir($store_dir,0777,true);
+        mkdir($store_dir, 0777, true);
     }
     // 是否允许覆盖相同文件
     $accept_overwrite = 1;
@@ -271,7 +271,7 @@ if ($upload_file) {
         exit;
     }
     // 复制文件到指定目录
-    if (!move_uploaded_file($upload_file,$store_dir.$upload_file_name)) {
+    if (!move_uploaded_file($upload_file, $store_dir.$upload_file_name)) {
         echo "复制文件失败";
         exit;
     }
@@ -297,33 +297,33 @@ if (isset($_FILES['upload_file']) && !empty($_FILES['upload_file']['name'])) {
     // 文件被上传后在服务端储存的临时文件名。
     $erroe = isset($_FILES['upload_file']['error']) ? $_FILES['upload_file']['error'] : '';
     switch($erroe){
-        case 0:
-            echo "上传成功";
-            break;
-        case 1:
-            echo "上传的文件超过了 php.ini 中 upload_max_filesize 选项限制的值.";
-            break;
-        case 2:
-            echo "上传文件的大小超过了 HTML 表单中 MAX_FILE_SIZE 选项指定的值。";
-            break;
-        case 3:
-            echo "文件只有部分被上传";
-            break;
-        case 4:
-            echo "没有文件被上传";
-            break;
-        case 6:
-            echo "没有缓存目录";
-            break;
-        case 7:
-            echo "上传目录不可读";
-            break;
-        case 8:
-            echo "上传停止";
-            break;
-        default:
-            echo "没有选择上传文件";
-            break;
+    case 0:
+        echo "上传成功";
+        break;
+    case 1:
+        echo "上传的文件超过了 php.ini 中 upload_max_filesize 选项限制的值.";
+        break;
+    case 2:
+        echo "上传文件的大小超过了 HTML 表单中 MAX_FILE_SIZE 选项指定的值。";
+        break;
+    case 3:
+        echo "文件只有部分被上传";
+        break;
+    case 4:
+        echo "没有文件被上传";
+        break;
+    case 6:
+        echo "没有缓存目录";
+        break;
+    case 7:
+        echo "上传目录不可读";
+        break;
+    case 8:
+        echo "上传停止";
+        break;
+    default:
+        echo "没有选择上传文件";
+        break;
     }
     echo "<script language=JavaScript>location.replace(location.href);</script>";
 }

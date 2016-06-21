@@ -9,6 +9,23 @@ Usage
 
 There is including DB file, file list, file manager, shell scripts
 
+Support big file need to change your nginx/apache, and php upload file part configuration.
+```
+nginx
+    keepalive_timeout 600;
+    client_max_body_size 2000m;
+    fastcgi_connect_timeout 3000;
+    fastcgi_send_timeout 3000;
+apache
+    Timeout 3000
+php
+    post_max_size = 2048M
+    file_uploads = On
+    upload_max_filesize = 2048M
+```
+
+
+
 ###uploads.php
 ```
 http://ip or domain/uploads.php

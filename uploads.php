@@ -262,7 +262,7 @@ if ($upload_file) {
     $accept_overwrite = 1;
     // 检查文件大小
     if ($upload_file_size > $file_size_max) {
-        echo "对不起，你的文件容量大于规定";
+        echo "对不起,你的文件容量大于规定";
         exit;
     }
     // 检查读写文件
@@ -280,21 +280,21 @@ if (isset($_FILES['upload_file']) && !empty($_FILES['upload_file']['name'])) {
     echo "<p>你上传了文件:";
     echo isset($_FILES['upload_file']['name']) ? $_FILES['upload_file']['name'] : '';
     echo "<br>";
-    // 客户端机器文件的原名称。
+    // 客户端机器文件的原名称.
 
     echo "文件的 MIME 类型为:";
     echo isset($_FILES['upload_file']['type']) ? $_FILES['upload_file']['type'] : '';
-    // 文件的 MIME 类型，需要浏览器提供该信息的支持，例如“image/gif”。
+    // 文件的 MIME 类型,需要浏览器提供该信息的支持,例如"image/gif".
     echo "<br>";
 
     echo "上传文件大小:";
     echo isset($_FILES['upload_file']['size']) ? $_FILES['upload_file']['size'] : '';
-    // 已上传文件的大小，单位为字节。
+    // 已上传文件的大小,单位为字节.
     echo "<br>";
 
     echo "文件上传后被临时储存为:";
     echo isset($_FILES['upload_file']['tmp_name']) ? $_FILES['upload_file']['tmp_name'] : '';
-    // 文件被上传后在服务端储存的临时文件名。
+    // 文件被上传后在服务端储存的临时文件名.
     $erroe = isset($_FILES['upload_file']['error']) ? $_FILES['upload_file']['error'] : '';
     switch($erroe){
     case 0:
@@ -304,7 +304,7 @@ if (isset($_FILES['upload_file']) && !empty($_FILES['upload_file']['name'])) {
         echo "上传的文件超过了 php.ini 中 upload_max_filesize 选项限制的值.";
         break;
     case 2:
-        echo "上传文件的大小超过了 HTML 表单中 MAX_FILE_SIZE 选项指定的值。";
+        echo "上传文件的大小超过了 HTML 表单中 MAX_FILE_SIZE 选项指定的值.";
         break;
     case 3:
         echo "文件只有部分被上传";

@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 # need ldap3, ldap-utils, python-ldap package
-import os
-import sys
 import ldap
 
 def login_ldap(username, password, domainname, com, server):

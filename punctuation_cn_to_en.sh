@@ -51,6 +51,7 @@ punctuation_zh_arr[25]='＿'
 punctuation_zh_arr[26]='…'
 punctuation_zh_arr[27]='—'
 punctuation_zh_arr[28]='﹏'
+punctuation_zh_arr[29]='–'
 
 punctuation_en_arr[1]="."
 punctuation_en_arr[2]="?"
@@ -80,6 +81,7 @@ punctuation_en_arr[25]='_'
 punctuation_en_arr[26]='...'
 punctuation_en_arr[27]='-'
 punctuation_en_arr[28]='_'
+punctuation_en_arr[29]='--'
 
 
 replace_punctuation() {

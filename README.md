@@ -66,6 +66,7 @@ This script can sync all the folder git project.
 ```
 ./sync_git.sh path[absolute path or relative path or filename]
 ```
+![sync_git](https://cloud.githubusercontent.com/assets/1259324/20429429/884ffb18-adc9-11e6-8af7-8cbcd6509aa7.png)
 
 
 Contact

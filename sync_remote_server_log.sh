@@ -83,6 +83,9 @@ sync_all_log() {
         done
 
     done
+
+    # delete +3days logs
+    find $bak_dir$i -mtime +3 -name "*.*"  -exec rm -rf {} \;
     echo 'Sync done'
 
 }

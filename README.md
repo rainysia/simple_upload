@@ -26,7 +26,7 @@ php
 
 
 
-###uploads.php
+###uploads.php or uploads_new.php
 ```
 http://ip or domain/uploads.php
 ```

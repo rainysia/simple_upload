@@ -1,5 +1,5 @@
 <?php
-$new = new SimpleFile(['store_dir' => 'uploads_test']);
+$new = new SimpleFile(['store_dir' => 'uploads']);
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
@@ -262,7 +262,8 @@ class SimpleFile
                 exit;
             }
             try {
-                $_del_file = base64_decode($_REQUEST['del_file']);
+                // $_GET will transfer + to space
+                $_del_file = base64_decode(str_replace(" ", "+", $_REQUEST['del_file']));
                 if (is_file($this->saveDir.$_del_file)) {
                     $_del_tmp_file = $this->saveDir.$_del_file;
                     unlink($_del_tmp_file);

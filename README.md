@@ -6,7 +6,6 @@ It's a php file ,you can use it upload file or download file from your web-serve
 
 Usage
 ----------------------------------------
-
 There is including DB file, file list, file manager, shell scripts
 
 Support big file need to change your nginx/apache, and php upload file part configuration.
@@ -24,23 +23,20 @@ php
     upload_max_filesize = 2048M
 ```
 
-
-
 ###uploads.php or uploads_new.php
 ```
 http://ip or domain/uploads.php
 ```
-![uploads.php](https://cloud.githubusercontent.com/assets/1259324/13483267/ea6aa5f0-e12d-11e5-8096-2d17480d405d.png)
 
+![uploads.php](https://cloud.githubusercontent.com/assets/1259324/13483267/ea6aa5f0-e12d-11e5-8096-2d17480d405d.png)
 
 ```
 http://ip or domain/uploads.php?user=superadmin
 ```
+
 ![uploads.php can delete](https://cloud.githubusercontent.com/assets/1259324/13483279/03fe57fa-e12e-11e5-877e-0af62cb7cc5a.png)
 
-
 ###adminer.php
-
 ```
 http://ip or domain/adminer.php
 ```
@@ -73,15 +69,13 @@ Contact
 ----------------------------------------
 <rainysia@gmail.com>
 
-
 Requirements
 ----------------------------------------
-
-    php > 5.2, nginx or apache
-
+    php > 5.3, nginx or apache
 
 Update
 ----------------------------------------
 2015-05-12 14:59:04 add basic READ.md<br />
 2015-06-01 10:50:58 add file.php<br />
 2016-03-03 10:47:38 modify uploads.php<br />
+2018-03-02 15:28:54 add uploads_new.php<br />

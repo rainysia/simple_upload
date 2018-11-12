@@ -9,7 +9,7 @@ echo "<span style='color:#d64d8c;font-family:cursive;'>",$instruction.'</span><b
 echo "<h3 style='color:#b36aad;font-family:cursive;'>",$_SERVER['SERVER_NAME'],$_SERVER["SCRIPT_NAME"],'?user=apache&path=/opt/app/nginx/html/env{x1}/project{x2}&command={x3}&key={x4}<br />';
 echo "<h3 style='color:#b36aad;font-family:cursive;'>It will run <b>sudo -u apache php artisan ", $_SERVER["DOCUMENT_ROOT"], '/env{x}/project{x} $key</b><br />';
 echo "i.e.:  <br />
-http://shell.test.com/index.php?user=apache&path=/opt/app/nginx/html/qa1/test&command=TestCommand&key=true<br />
+http://shell.test.com/index.php?user=apache&path=/opt/app/nginx/html/env1/test&command=TestCommand&key=true<br />
 ";
 
 $_user    = (isset($_GET['user']) && !empty($_GET['user'])) ? trim($_GET['user']) : 'apache';
@@ -23,6 +23,7 @@ if (empty($_path) || !is_dir($_path)) {
 }
 
 $run = "sudo -u $_user php $_path/artisan $_command $_param";
+//$run = "php $_path/artisan $_command $_param";
 //$run = "php $_path $_command $_param";
 echo "<pre><div style='color:#ca81b3;font-family:cursive;'>";
 if (empty($_command) || empty($_path)) {

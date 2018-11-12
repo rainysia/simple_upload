@@ -64,6 +64,12 @@ This script can sync all the folder git project.
 ```
 ![sync_git](https://cloud.githubusercontent.com/assets/1259324/20429429/884ffb18-adc9-11e6-8af7-8cbcd6509aa7.png)
 
+###php_laravel_shell.php
+This script can run laravel command via http
+```
+put it into you web-server and run it/php_laravel_shell.php
+```
+
 
 Contact
 ----------------------------------------
@@ -79,3 +85,4 @@ Update
 2015-06-01 10:50:58 add file.php<br />
 2016-03-03 10:47:38 modify uploads.php<br />
 2018-03-02 15:28:54 add uploads_new.php<br />
+2018-11-12 14:00:36 add laravel web-shell.php<br />

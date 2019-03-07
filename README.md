@@ -70,6 +70,13 @@ This script can run laravel command via http
 put it into you web-server and run it/php_laravel_shell.php
 ```
 
+###Remove merged branch
+This script will delete upstream or origin remote repository branch
+```
+./xxx/git_branch_clean.sh /xxx/project_folder/ remote_name
+./xxx/git_branch_clean.sh /xxx/project_folder/ upstream
+```
+
 
 Contact
 ----------------------------------------
@@ -86,3 +93,4 @@ Update
 2016-03-03 10:47:38 modify uploads.php<br />
 2018-03-02 15:28:54 add uploads_new.php<br />
 2018-11-12 14:00:36 add laravel web-shell.php<br />
+2019-03-07 15:51:22 add git_branch_clean.sh<br />

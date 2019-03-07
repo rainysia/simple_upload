@@ -51,7 +51,10 @@ fi
 
 let branch_len=${#remote_name}+1
 all_branches=`cd $project_path && git branch -r | grep $remote_name | grep -v "$remote_name/HEAD"`
-index=0
+i_del=0
+i_no=0
+i_ke=0
+
 
 #`cd $project_path && git remote update -p > /dev/null 2>&1`
 `cd $project_path && git stash > /dev/null 2>&1`
@@ -69,6 +72,7 @@ for i in ${all_branches}; do
         if [[ `cd $project_path && git log --oneline | grep $_sha_id` ]]; then
             if [[ $_branch_name =~ $keep_keywords ]]; then
                 echo -e "\033[1;30m Keep Keywords  branch: \033[0m\033[1;34m $remote_name/$_branch_name $_sha_id \033[0m"
+                let i_ke+=1
             else
                 if [[ $_branch_name =~ "HEAD" ]]; then
                     echo -e "\033[1;30m Keep Current branch: \033[0m\033[1;34m $remote_name/$_branch_name $_sha_id \033[0m"
@@ -80,7 +84,8 @@ for i in ${all_branches}; do
             fi
         else
             echo -e "\033[1;30m Keep no merged branch: \033[0m\033[1;34m $remote_name/$_branch_name $_sha_id \033[0m"
+            let i_no+=1
         fi
     fi
 done
-echo -e "\033[1;36m=====End to handle project branch:\033[0m\033[41;33;1m$index\033[0m\033[1;34m $project_path $remote_name $default_branch\033[0m\033[1;36m=====\033[0m"
+echo -e "\033[1;36m=====End to handle project branch:\033[0m deleted:\033[41;33;1m$i_del\033[0m keep:\033[42;32;1m$i_ke\033[0m no merged:\033[43;32;1m$i_no\033[0m\033[1;34m $project_path $remote_name $default_branch\033[0m\033[1;36m=====\033[0m"

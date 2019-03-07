@@ -56,7 +56,7 @@ i_no=0
 i_ke=0
 
 
-#`cd $project_path && git remote update -p > /dev/null 2>&1`
+`cd $project_path && git remote update -p > /dev/null 2>&1`
 `cd $project_path && git stash > /dev/null 2>&1`
 `cd $project_path && git checkout $default_branch > /dev/null 2>&1`
 

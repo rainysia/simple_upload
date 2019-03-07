@@ -79,7 +79,7 @@ for i in ${all_branches}; do
                 else
                     `cd $project_path && git push $remote_name --delete $_branch_name > /dev/null 2>&1`
                     echo -e "\033[1;31m Delete merged branch: \033[0m\033[1;32m  $remote_name/$_branch_name $_sha_id \033[0m"
-                    let index+=1
+                    let i_del+=1
                 fi
             fi
         else

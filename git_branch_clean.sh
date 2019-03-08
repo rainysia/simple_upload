@@ -25,6 +25,7 @@
 
 set -e
 declare -a need_del_branches_arr protect_branches_arr
+now=`date '+%F %H:%M:%S'`
 default_branch='develop'
 protect_branches_arr=(develop master latest)
 keep_keywords="release"
@@ -60,7 +61,7 @@ i_ke=0
 `cd $project_path && git stash > /dev/null 2>&1`
 `cd $project_path && git checkout $default_branch > /dev/null 2>&1`
 
-echo -e "\033[1;36m=====Start to handle project branch:\033[0m\033[1;34m $project_path $remote_name $default_branch\033[0m\033[1;36m=====\033[0m"
+echo -e "\033[1;36m=====$now Start to handle project branch:\033[0m\033[1;34m $project_path $remote_name $default_branch\033[0m\033[1;36m=====\033[0m"
 for i in ${all_branches}; do
     i_len=${#i}
     _branch_name=${i:$branch_len:$i_len}
@@ -88,4 +89,4 @@ for i in ${all_branches}; do
         fi
     fi
 done
-echo -e "\033[1;36m=====End to handle project branch:\033[0m deleted:\033[41;33;1m$i_del\033[0m keep:\033[42;32;1m$i_ke\033[0m no merged:\033[43;32;1m$i_no\033[0m\033[1;34m $project_path $remote_name $default_branch\033[0m\033[1;36m=====\033[0m"
+echo -e "\033[1;36m=====$now End to handle project branch:\033[0m deleted:\033[41;33;1m$i_del\033[0m keep:\033[42;32;1m$i_ke\033[0m no merged:\033[43;32;1m$i_no\033[0m\033[1;34m $project_path $remote_name $default_branch\033[0m\033[1;36m=====\033[0m"

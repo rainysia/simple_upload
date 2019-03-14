@@ -23,7 +23,9 @@ php
     upload_max_filesize = 2048M
 ```
 
+
 ###uploads.php or uploads_new.php
+--------
 ```
 http://ip or domain/uploads.php
 ```
@@ -37,6 +39,7 @@ http://ip or domain/uploads.php?user=superadmin
 ![uploads.php can delete](https://cloud.githubusercontent.com/assets/1259324/13483279/03fe57fa-e12e-11e5-877e-0af62cb7cc5a.png)
 
 ###adminer.php
+-----------
 ```
 http://ip or domain/adminer.php
 ```
@@ -44,12 +47,14 @@ http://ip or domain/adminer.php
 
 
 ###file.php
+---------
 ```
 http://ip or domain/file.php
 ```
 ![file.php](https://cloud.githubusercontent.com/assets/1259324/13483264/e67c7a40-e12d-11e5-976b-9552946f7d12.png)
 
 ###punctuation_cn_to_en.sh
+---------
 It will translate all chinese punctuation to english punctuation, run 
 ```
 ./punctuation_cn_to_en.sh path[absolute path or relative path or filename]
@@ -58,6 +63,7 @@ It will translate all chinese punctuation to english punctuation, run
 ![punc](https://cloud.githubusercontent.com/assets/1259324/15665993/dc4cc724-2740-11e6-9043-8e7ad7fb7879.png)
 
 ###sync_git.sh
+--------
 This script can sync all the folder git project.
 ```
 ./sync_git.sh path[absolute path or relative path or filename]
@@ -65,17 +71,21 @@ This script can sync all the folder git project.
 ![sync_git](https://cloud.githubusercontent.com/assets/1259324/20429429/884ffb18-adc9-11e6-8af7-8cbcd6509aa7.png)
 
 ###php_laravel_shell.php
+---------
 This script can run laravel command via http
 ```
 put it into you web-server and run it/php_laravel_shell.php
 ```
 
 ###Remove merged branch
+------------
 This script will delete upstream or origin remote repository branch
+**Need to set keep_keywords, default_branch, protect_branches_arr**
 ```
 ./xxx/git_branch_clean.sh /xxx/project_folder/ remote_name
 ./xxx/git_branch_clean.sh /xxx/project_folder/ upstream
 ```
+![git_branch_clean](https://user-images.githubusercontent.com/1259324/54344032-180df380-467b-11e9-962f-c542f7e42f44.png)
 
 
 Contact

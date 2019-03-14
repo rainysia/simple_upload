@@ -85,7 +85,7 @@ This script will delete upstream or origin remote repository branch
 ./xxx/git_branch_clean.sh /xxx/project_folder/ remote_name
 ./xxx/git_branch_clean.sh /xxx/project_folder/ upstream
 ```
-![git_branch_clean](https://user-images.githubusercontent.com/1259324/54344032-180df380-467b-11e9-962f-c542f7e42f44.png)
+![git_branch_clean](https://user-images.githubusercontent.com/1259324/54344563-1abd1880-467c-11e9-82f6-059d890d8d10.png)
 
 
 Contact

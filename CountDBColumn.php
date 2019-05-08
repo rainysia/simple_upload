@@ -404,22 +404,22 @@ if (count($columnArr) > 0) {
         try {
             $_res = $checkDB->query($sql);
         } catch (Exception $e) {
-            echo $sql. " can't execute causing ".$e->getMessage()." \n";
+            echo $sql. " can't execute causing ".$e->getMessage()." \n<br />";
             continue;
         }
         $_length = $_res[0]['maxlen'];
 
         if ($_length / trim($v['CHARACTER_MAXIMUM_LENGTH'], "'") >  0.8) {
             $sql_res = "select * from `$table_name` where length(`$column_name`)=(select max(length(`$column_name`)) as maxlen from `$table_name`);";
-            echo $sql_res."\n";
+            echo $sql_res."\n<br />";
             echo 'table:'.$v['TABLE_NAME'].', column:'.$v['COLUMN_NAME']
                 .', column_type:'. $v['COLUMN_TYPE']
                 .', nearly overrun length:'. $_length
-                ."\n";
+                ."\n<br />";
             $n++;
         }
     }
-    echo 'total:'.$n."\n";
+    echo 'total:'.$n."\n<br />";
 }
 
 // alter table `xxx` change column `xxx1` `xxx1` varchar(100) DEFAULT NULL;

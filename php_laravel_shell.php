@@ -35,6 +35,8 @@ if (empty($_command) || empty($_path)) {
     echo 'user:',$_user,'; path:',$_path,'; command:',$_command,'; param:',$_param.'<br />';
     echo 'You will run command:<br />';
     echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp<b>',$run,'</b><br />';
+    ini_set('memory_limit', '256M');
+    set_time_limit(0);
     exec($run, $res, $rc);
     print_r($res);
     print_r($rc==1 ? 'Run Success' : 'Run Fail');

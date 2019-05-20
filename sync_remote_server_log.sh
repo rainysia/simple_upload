@@ -11,8 +11,8 @@ else
     fi
 fi
 
-declare -a log_proj1 log_work log_proj2
-proj_name="proj1 proj2 proj3"
+declare -a log_proj1 log_proj2 log_proj2 sign sign_console
+proj_name="proj1 proj2 proj3 sign sign_console"
 bak_dir="/home/www/logs/"
 
 file_tailer='.log.gz'
@@ -38,26 +38,45 @@ log_proj2[5]='console-'${d4_date}_*${file_tailer}
 
 # proj3
 log_proj3[1]='console-'${d0_date}.*
-log_proj3[2]='console-'${d1_date}_*${file_tailer}
 log_proj3[3]='console-'${d2_date}_*${file_tailer}
 log_proj3[4]='console-'${d3_date}_*${file_tailer}
 log_proj3[5]='console-'${d4_date}_*${file_tailer}
 
+# proj4
+log_sign[1]='main'${d0_date}.*
+log_sign[3]='main'${d2_date}_*${file_tailer}
+log_sign[4]='main'${d3_date}_*${file_tailer}
+log_sign[5]='main'${d4_date}_*${file_tailer}
+
+# proj5 existed in proj4 log folder with different name
+log_sign_console[1]='console.'${d0_date}.*
+log_sign_console[3]='console.'${d2_date}_*${file_tailer}
+log_sign_console[4]='console.'${d3_date}_*${file_tailer}
+log_sign_console[5]='console.'${d4_date}_*${file_tailer}
+
 sync_3_day_log() {
     for i in ${proj_name}
     do
+        #echo $i
         if [ ! -d "$bak_dir$i" ];
         then
-            mkdir "$bak_dir$i"
+            if [ $i=='sign_console' ]; then
+                echo $i > /dev/null 2>&1
+            else
+                mkdir "$bak_dir$i"
+            fi
         fi
         logs="log_"${i}"[@]"
+        #echo $logs
         for log in ${!logs}
         do
-            scp -P2222 user@123.456.789.10:/logs/project/${i}/$log $bak_dir > /dev/null 2>&1
+            if [ ${i} == 'sign_console' ]; then
+                i='sign'
+            fi
+            scp -P22 test@192.168.100.200:/var/logs/project/${i}/$log $bak_dir$i > /dev/null 2>&1
             full_log=$bak_dir$i/$log
-            if [ ${full_log##*.} = "gz" ] > /dev/null 2>&1;
-            then
-                gzip -d $full_log
+            if [ ${full_log##*.} = "gz" ] > /dev/null 2>&1; then
+                gzip -d -f $full_log
             fi
         done
     done
@@ -67,28 +86,33 @@ sync_3_day_log() {
 sync_all_log() {
     for i in ${proj_name}
     do
+        if [ $i == 'sign_console' ]; then
+            i='sign'
+        fi
+        echo $i
         if [ ! -d "$bak_dir$i" ];
         then
+            echo "$bak_dir$i"
             mkdir "$bak_dir$i"
         fi
-        scp -r -P1022 user@123.456.789.10:/logs/project/${i}/ $bak_dir > /dev/null 2>&1
+        scp -r -P22 test@192.168.100.200:/var/logs/project/${i}/ $bak_dir > /dev/null 2>&1
         echo "All "$i" log sync done!\n";
         for log in `ls -la $bak_dir$i | awk '{print $9}'`
         do
             full_log=$bak_dir$i/$log
             if [ ${full_log##*.} = "gz" ] > /dev/null 2>&1;
             then
-                gzip -d $full_log
+                echo $full_log
+                gzip -f -d $full_log
             fi
         done
-
     done
 
     # delete +3days logs
-    find $bak_dir$i -mtime +3 -name "*.*"  -exec rm -rf {} \;
+    #find $bak_dir$i -mtime +3 -name "*.*"  -exec rm -rf {} \;
     echo 'Sync done'
 
 }
 
-#sync_3_day_log
-sync_all_log
+sync_3_day_log
+#sync_all_log

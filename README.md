@@ -87,6 +87,16 @@ This script will delete upstream or origin remote repository branch
 ```
 ![git_branch_clean](https://user-images.githubusercontent.com/1259324/54344563-1abd1880-467c-11e9-82f6-059d890d8d10.png)
 
+###Count DB's table's column is out-of-design or not.
+--------------
+This script will query schema table to calculate the column defined and do mathematics, can set the tolerance in line 412.
+0.8 means reach/over the design capacity 80%.
+**Need to set $DBsetting and $checkDBName**
+```
+http://ip or domain/countDBColumn.php
+```
+![countDBColumn](https://user-images.githubusercontent.com/1259324/58074758-984f5880-7bd8-11e9-9f0f-49156972d834.png)
+
 
 Contact
 ----------------------------------------
@@ -104,3 +114,4 @@ Update
 2018-03-02 15:28:54 add uploads_new.php<br />
 2018-11-12 14:00:36 add laravel web-shell.php<br />
 2019-03-07 15:51:22 add git_branch_clean.sh<br />
+2019-05-21 14:44:24 add countDBcolumn.php<br />

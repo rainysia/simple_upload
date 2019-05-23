@@ -27,6 +27,7 @@ if [ ! -d "$log_path" ]; then
 fi
 supervisord_res=`ps aux | grep '/usr/bin/supervisord' | grep -v 'grep' | awk ' { print NR=$2 }' | sed -n 1p`
 if [ ! -n "$supervisord_res" ]; then
+    #/bin/bash /etc/init.d/supervisor start
     /bin/bash /etc/init.d/supervisor start
     echo "\n=============start=================\n$now restart supervisor by Tom because it's stop\n=============end===================" >> $log_path"supervisord.log"
 else

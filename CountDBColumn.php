@@ -387,7 +387,7 @@ $infoDB = new DB($DBsetting);
 // select TABLE_SCHEMA, TABLE_NAME, COLUMN_NAME, DATA_TYPE, CHARACTER_MAXIMUM_LENGTH,CHARACTER_OCTET_LENGTH,CHARACTER_SET_NAME,COLLATION_NAME,COLUMN_TYPE 
 //  from INFORMATION_SCHEMA.COLUMNS where TABLE_SCHEMA='xxxx' and DATA_TYPE not in ('int', 'tinyint', 'bigint', 'decimal', 'timestamp', 'date', 'datetime', 'enum') limit 5000
 $schemaSql = "select TABLE_SCHEMA, TABLE_NAME, COLUMN_NAME, DATA_TYPE, CHARACTER_MAXIMUM_LENGTH,CHARACTER_OCTET_LENGTH,CHARACTER_SET_NAME,COLLATION_NAME,COLUMN_TYPE 
-        from INFORMATION_SCHEMA.COLUMNS where TABLE_SCHEMA='{$checkDBName}' and DATA_TYPE not in ('int', 'tinyint', 'bigint', 'decimal', 'timestamp', 'date', 'datetime', 'enum') limit 5000";
+        from INFORMATION_SCHEMA.COLUMNS where TABLE_SCHEMA='{$checkDBName}' and DATA_TYPE not in ('int', 'smallint', 'tinyint', 'bigint', 'double', 'decimal', 'timestamp', 'date', 'datetime', 'enum') limit 5000";
 $columnArr = $infoDB->query($schemaSql);
 
 

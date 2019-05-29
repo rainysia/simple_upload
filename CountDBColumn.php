@@ -399,7 +399,7 @@ if (count($columnArr) > 0) {
         $db_name = $v['TABLE_SCHEMA'];
         $table_name = $v['TABLE_NAME'];
         $column_name = $v['COLUMN_NAME'];
-        $sql = "select max(length(`$column_name`)) as maxlen from `$table_name`;";
+        $sql = "select max(char_length(`$column_name`)) as maxlen from `$table_name`;";
         //echo $sql."\n<br />";
         try {
             $_res = $checkDB->query($sql);
@@ -409,13 +409,13 @@ if (count($columnArr) > 0) {
         }
         $_length = $_res[0]['maxlen'];
 
-        if ($_length / trim($v['CHARACTER_MAXIMUM_LENGTH'], "'") >  0.8) {
-            $sql_res = "select * from `$table_name` where length(`$column_name`)=(select max(length(`$column_name`)) as maxlen from `$table_name`);";
+        if ($_length / trim($v['CHARACTER_MAXIMUM_LENGTH'], "'") >  0.7) {
+            $sql_res = "select * from `$table_name` where char_length(`$column_name`)=(select max(char_length(`$column_name`)) as maxlen from `$table_name`);";
             echo $sql_res."\n<br />";
             echo 'table:'.$v['TABLE_NAME'].', column:'.$v['COLUMN_NAME']
                 .', column_type:'. $v['COLUMN_TYPE']
                 .', nearly overrun length:'. $_length
-                ."\n<br />";
+                ."\n<br /><hr />";
             $n++;
         }
     }

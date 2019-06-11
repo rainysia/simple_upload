@@ -1,4 +1,22 @@
 #!/bin/bash
+#*
+# * Short description for file
+
+# * BASH version num
+
+# * @filename   sync_remote_server_log.sh
+# * @category   CategoryName
+# * @package    PackageName
+# * @author     Rainy Sia <rainysia@gmail.com>
+# * @copyright  2013-2019 BTROOT.ORG
+# * @license    https://opensource.org/licenses/MIT license
+# * @version    GIT: 0.0.1
+# * @createTime 2013-06-11 16:15:24
+# * @lastChange 2019-06-11 16:15:24
+
+# * @link http://www.btroot.org
+#*
+
 set -e
 if [ -z "$1" ]; then
     current_path=`pwd`'/'
@@ -11,8 +29,8 @@ else
     fi
 fi
 
-declare -a log_proj1 log_proj2 log_proj2 sign sign_console
-proj_name="proj1 proj2 proj3 sign sign_console"
+declare -A log_project
+proj_name="proj1 proj2 proj3 proj4"
 bak_dir="/home/www/logs/"
 
 file_tailer='.log.gz'
@@ -22,80 +40,87 @@ d2_date=`date -d -1day +%F`.log.`date -d -1day +%Y%m%d`
 d3_date=`date -d -2day +%F`.log.`date -d -2day +%Y%m%d`
 d4_date=`date -d -3day +%F`.log.`date -d -3day +%Y%m%d`
 
-# proj1
-log_proj1[1]='main-'${d0_date}.*
-log_proj1[2]='main-'${d1_date}_*${file_tailer}
-log_proj1[3]='main-'${d2_date}_*${file_tailer}
-log_proj1[4]='main-'${d3_date}_*${file_tailer}
-log_proj1[5]='main-'${d4_date}_*${file_tailer}
+# log_format
+log_format[1]='main'
+log_format[2]='main-'
+log_format[3]='console.'
+log_format[4]='console-'
 
-# proj2
-log_proj2[1]='console-'${d0_date}.*
-log_proj2[2]='console-'${d1_date}_*${file_tailer}
-log_proj2[3]='console-'${d2_date}_*${file_tailer}
-log_proj2[4]='console-'${d3_date}_*${file_tailer}
-log_proj2[5]='console-'${d4_date}_*${file_tailer}
+log_tailer[1]=${d0_date}.*
+log_tailer[2]=${d2_date}_*${file_tailer}
+log_tailer[3]=${d3_date}_*${file_tailer}
+log_tailer[4]=${d4_date}_*${file_tailer}
 
-# proj3
-log_proj3[1]='console-'${d0_date}.*
-log_proj3[3]='console-'${d2_date}_*${file_tailer}
-log_proj3[4]='console-'${d3_date}_*${file_tailer}
-log_proj3[5]='console-'${d4_date}_*${file_tailer}
-
-# proj4
-log_sign[1]='main'${d0_date}.*
-log_sign[3]='main'${d2_date}_*${file_tailer}
-log_sign[4]='main'${d3_date}_*${file_tailer}
-log_sign[5]='main'${d4_date}_*${file_tailer}
-
-# proj5 existed in proj4 log folder with different name
-log_sign_console[1]='console.'${d0_date}.*
-log_sign_console[3]='console.'${d2_date}_*${file_tailer}
-log_sign_console[4]='console.'${d3_date}_*${file_tailer}
-log_sign_console[5]='console.'${d4_date}_*${file_tailer}
-
+# proj1, log_format[2] + log_tailer
+# proj2, log_format[4] + log_tailer
+# proj3, log_format[4] + log_tailer
+# proj4, log_format[1] + log_tailer
+# proj5, log_format[3] + log_tailer
+# proj6, log_format[4] + log_tailer
+# proj7, log_format[4] + log_tailer
+# proj8, log_format[2] + log_tailer
+log_project=(
+    [proj1]="2"
+    [proj2]="4"
+    [proj3]="4"
+    [proj4]="1"
+    [proj5]="3"
+    [proj6]="4"
+    [proj7]="4"
+    [proj8]="2"
+)
 sync_3_day_log() {
     for i in ${proj_name}
     do
-        #echo $i
+        #echo $bak_dir$i
         if [ ! -d "$bak_dir$i" ];
         then
-            if [ $i=='sign_console' ]; then
+            if [ "$i" == "proj4" ]; then
                 echo $i > /dev/null 2>&1
             else
-                mkdir "$bak_dir$i"
+                mkdir -p "$bak_dir$i"
             fi
         fi
-        logs="log_"${i}"[@]"
-        #echo $logs
-        for log in ${!logs}
+
+        #echo $i
+        proj_log_arr[1]=${log_format[${log_project[$i]}]}${log_tailer[1]}
+        proj_log_arr[2]=${log_format[${log_project[$i]}]}${log_tailer[2]}
+        proj_log_arr[3]=${log_format[${log_project[$i]}]}${log_tailer[3]}
+        proj_log_arr[4]=${log_format[${log_project[$i]}]}${log_tailer[4]}
+
+        for log in ${proj_log_arr[@]};
         do
-            if [ ${i} == 'sign_console' ]; then
-                i='sign'
+            # rewrite target folder
+            if [ $i == 'proj4' ]; then
+                i='proj3'
             fi
-            scp -P22 test@192.168.100.200:/var/logs/project/${i}/$log $bak_dir$i > /dev/null 2>&1
+
+            #echo "scp -P22 test@123.123.123.123:/var/chroot/logs/project/${i}/$log $bak_dir$i"
+            scp -P22 test@123.123.123.123:/var/chroot/logs/project/${i}/$log $bak_dir$i > /dev/null 2>&1
             full_log=$bak_dir$i/$log
+
             if [ ${full_log##*.} = "gz" ] > /dev/null 2>&1; then
                 gzip -d -f $full_log
             fi
         done
     done
-    echo 'Sync done'
+    echo 'Sync 3 days log done'
 }
 
 sync_all_log() {
     for i in ${proj_name}
     do
-        if [ $i == 'sign_console' ]; then
-            i='sign'
+        if [ "$i" == "proj4" ]; then
+            i='proj3'
         fi
         echo $i
         if [ ! -d "$bak_dir$i" ];
         then
             echo "$bak_dir$i"
-            mkdir "$bak_dir$i"
+            mkdir -p "$bak_dir$i"
         fi
-        scp -r -P22 test@192.168.100.200:/var/logs/project/${i}/ $bak_dir > /dev/null 2>&1
+        #echo "scp -r -P22 test@123.123.123.123:/var/chroot/logs/project/${i}/ $bak_dir"
+        scp -r -P22 test@123.123.123.123:/var/chroot/logs/project/${i}/ $bak_dir > /dev/null 2>&1
         echo "All "$i" log sync done!\n";
         for log in `ls -la $bak_dir$i | awk '{print $9}'`
         do

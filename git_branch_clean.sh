@@ -22,12 +22,13 @@
 # 4, check history
 # 5, delete
 # ./git_branch_clean.sh /home/www/project upstream
+# ./git_branch_clean.sh /home/www/project upstream true # will use today as keep_keywords
 
 set -e
 declare -a need_del_branches_arr protect_branches_arr
 default_branch='develop'
 protect_branches_arr=(develop master latest)
-keep_keywords="release"
+keepkeywords="release"
 
 if [ -z "$1" ]; then
     project_path=`pwd`'/'
@@ -43,6 +44,12 @@ if [ -z "$2" ]; then
     remote_name='upstream'
 else
     remote_name=$2
+fi
+
+if [ -z "$3" ]; then
+    keep_keywords=$keepkeywords
+else
+    keep_keywords=`date +%Y%m%d`
 fi
 if [ ! -d "$project_path"'.git' ]; then
     echo -e "\033[1;31m Wrong Git Project Folder: \033[0m\033[1;36m $project_path \033[0m"

@@ -97,6 +97,15 @@ http://ip or domain/countDBColumn.php
 ```
 ![countDBColumn](https://user-images.githubusercontent.com/1259324/58074758-984f5880-7bd8-11e9-9f0f-49156972d834.png)
 
+###Backup debian system configuration
+------------
+This script will backup system coonfiguration
+Need to set host_dir, path_user
+```
+/bin/bash ./xxx/bak_debian.sh
+```
+![bak_debian.sh]((https://user-images.githubusercontent.com/1259324/61096730-31894580-a48b-11e9-80cc-e1d4165734de.png)
+
 
 Contact
 ----------------------------------------
@@ -115,3 +124,4 @@ Update
 2018-11-12 14:00:36 add laravel web-shell.php<br />
 2019-03-07 15:51:22 add git_branch_clean.sh<br />
 2019-05-21 14:44:24 add countDBcolumn.php<br />
+2019-07-12 09:56:17 add bak_debian.sh<br />

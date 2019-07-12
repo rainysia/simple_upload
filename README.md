@@ -104,7 +104,7 @@ Need to set host_dir, path_user
 ```
 /bin/bash ./xxx/bak_debian.sh
 ```
-![bak_debian.sh]((https://user-images.githubusercontent.com/1259324/61096730-31894580-a48b-11e9-80cc-e1d4165734de.png)
+![bak_debian.sh](https://user-images.githubusercontent.com/1259324/61096730-31894580-a48b-11e9-80cc-e1d4165734de.png)
 
 
 Contact

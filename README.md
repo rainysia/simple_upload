@@ -106,6 +106,14 @@ Need to set host_dir, path_user
 ```
 ![bak_debian.sh](https://user-images.githubusercontent.com/1259324/61096730-31894580-a48b-11e9-80cc-e1d4165734de.png)
 
+###Re-new XMind Zen for debian
+------------
+This script will help to change XMind Zen register timestamp
+Need to set user_who
+```
+/bin/bash ./xxx/xmind_re_lease.sh
+```
+![xmind_re_lease.sh](https://user-images.githubusercontent.com/1259324/66371866-25a01780-e9d7-11e9-9bc1-45e9f1149e02.png)
 
 Contact
 ----------------------------------------

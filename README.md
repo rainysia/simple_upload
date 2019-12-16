@@ -115,6 +115,14 @@ Need to set user_who
 ```
 ![xmind_re_lease.sh](https://user-images.githubusercontent.com/1259324/66371866-25a01780-e9d7-11e9-9bc1-45e9f1149e02.png)
 
+###Sync git projects
+----------
+This script will help to sync all projects under the folder
+```
+/bin/bash ./xxx/sync_git_projects.sh projects_foler origin
+```
+![sync_git_projects.sh](https://user-images.githubusercontent.com/1259324/70901054-ff30d500-2034-11ea-8209-03a2de40fefd.png)
+
 Contact
 ----------------------------------------
 <rainysia@gmail.com>
@@ -133,3 +141,4 @@ Update
 2019-03-07 15:51:22 add git_branch_clean.sh<br />
 2019-05-21 14:44:24 add countDBcolumn.php<br />
 2019-07-12 09:56:17 add bak_debian.sh<br />
+2019-12-16 18:49:25 add sync_git_projects.sh<br />

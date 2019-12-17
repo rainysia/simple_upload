@@ -60,13 +60,13 @@ sync_remote() {
     i_up=0
     for i in ${under_projects}
     do
-        let i_up+=1
         tmp_project=${i%/*}
         tmp_proj_name=$(basename $tmp_project)
 
         if echo ${protect_projects[@]} | grep -w $tmp_proj_name &> /dev/null; then
             echo -e "\033[1;30m Keep protect project  : \033[0m\033[1;33m $tmp_project\033[0m"
         else
+            let i_up+=1
             detect_multiple_remote
             `cd $tmp_project && git stash > /dev/null 2>&1`
             `cd $tmp_project && git remote update -p > /dev/null 2>&1`

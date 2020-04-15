@@ -42,6 +42,8 @@ third_packages_repo_path=(
    'github.com/alecthomas/gometalinter'
    'github.com/fatih/gomodifytags'
    'golang.org/x/tools/gopls'
+   'golang.org/x/tools/mod'
+   'golang.org/x/tools/xerrors'
    'golang.org/x/tools/cmd/gorename'
    'github.com/jstemmer/gotags'
    'golang.org/x/tools/cmd/guru'

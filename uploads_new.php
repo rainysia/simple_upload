@@ -146,7 +146,7 @@ class SimpleFile
         'test.pptx'
     ];
     private $_adminGroup = [
-        'tommyx' => true,
+        'iamadmin' => true,
         'superadmin' => true,
     ];
     private $_sortType = [

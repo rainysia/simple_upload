@@ -24,10 +24,12 @@ php
 ```
 
 
-###uploads.php or uploads_new.php
+### uploads.php or uploads_new.php
 --------
+It will help you to support simple file manager(ftp) in your web server with only one php file.
 ```
-http://ip or domain/uploads.php
+http://ip or domain/uploads.php  (old version)
+http://ip or domain/uploads_new.php  // (new version, recommend this one)
 ```
 
 ![uploads.php](https://cloud.githubusercontent.com/assets/1259324/13483267/ea6aa5f0-e12d-11e5-8096-2d17480d405d.png)
@@ -38,31 +40,33 @@ http://ip or domain/uploads.php?user=superadmin
 
 ![uploads.php can delete](https://cloud.githubusercontent.com/assets/1259324/13483279/03fe57fa-e12e-11e5-877e-0af62cb7cc5a.png)
 
-###adminer.php
+### adminer.php
 -----------
+Simple DB manager file with one php file.
 ```
 http://ip or domain/adminer.php
 ```
 ![adminer.php](https://cloud.githubusercontent.com/assets/1259324/13483259/e19efb10-e12d-11e5-9907-ad58c2ed7514.png)
 
 
-###file.php
+### file.php
 ---------
+Simple file manager with one php file.
 ```
 http://ip or domain/file.php
 ```
 ![file.php](https://cloud.githubusercontent.com/assets/1259324/13483264/e67c7a40-e12d-11e5-976b-9552946f7d12.png)
 
-###punctuation_cn_to_en.sh
+### punctuation_cn_to_en.sh
 ---------
 It will translate all chinese punctuation to english punctuation, run 
 ```
 ./punctuation_cn_to_en.sh path[absolute path or relative path or filename]
 ```
-[**Chinese punctuation in Wikipedia**](https://zh.wikipedia.org/wiki/%E6%A0%87%E7%82%B9%E7%AC%A6%E5%8F%B7 "Wikipedia")
+[**Chinese punctuation in Wikipedia**](https://zh.wikipedia.org/wiki/%E6%A0%87%E7%82%B9%E7%AC%A6%E5%8F%B7 "Wikipedia") <br />
 ![punc](https://cloud.githubusercontent.com/assets/1259324/15665993/dc4cc724-2740-11e6-9043-8e7ad7fb7879.png)
 
-###sync_git.sh
+### sync_git.sh
 --------
 This script can sync all the folder git project.
 ```
@@ -70,14 +74,14 @@ This script can sync all the folder git project.
 ```
 ![sync_git](https://cloud.githubusercontent.com/assets/1259324/20429429/884ffb18-adc9-11e6-8af7-8cbcd6509aa7.png)
 
-###php_laravel_shell.php
+### php_laravel_shell.php
 ---------
-This script can run laravel command via http
+This php script can run laravel command via http
 ```
 put it into you web-server and run it/php_laravel_shell.php
 ```
 
-###Remove merged branch
+### Remove merged branch
 ------------
 This script will delete upstream or origin remote repository branch
 **Need to set keep_keywords, default_branch, protect_branches_arr**
@@ -87,7 +91,7 @@ This script will delete upstream or origin remote repository branch
 ```
 ![git_branch_clean](https://user-images.githubusercontent.com/1259324/54344563-1abd1880-467c-11e9-82f6-059d890d8d10.png)
 
-###Count DB's table's column is out-of-design or not.
+### Count DB's table's column is out-of-design or not.
 --------------
 This script will query schema table to calculate the column defined and do mathematics, can set the tolerance in line 412.
 0.8 means reach/over the design capacity 80%.
@@ -97,7 +101,7 @@ http://ip or domain/countDBColumn.php
 ```
 ![countDBColumn](https://user-images.githubusercontent.com/1259324/58074758-984f5880-7bd8-11e9-9f0f-49156972d834.png)
 
-###Backup debian system configuration
+### Backup debian system configuration
 ------------
 This script will backup system coonfiguration
 Need to set host_dir, path_user
@@ -106,7 +110,7 @@ Need to set host_dir, path_user
 ```
 ![bak_debian.sh](https://user-images.githubusercontent.com/1259324/61096730-31894580-a48b-11e9-80cc-e1d4165734de.png)
 
-###Re-new XMind Zen for debian
+### Re-new XMind Zen for debian
 ------------
 This script will help to change XMind Zen register timestamp
 Need to set user_who
@@ -115,7 +119,7 @@ Need to set user_who
 ```
 ![xmind_re_lease.sh](https://user-images.githubusercontent.com/1259324/66371866-25a01780-e9d7-11e9-9bc1-45e9f1149e02.png)
 
-###Sync git projects
+### Sync git projects
 ----------
 This script will help to sync all projects under the folder
 ```
@@ -123,7 +127,7 @@ This script will help to sync all projects under the folder
 ```
 ![sync_git_projects.sh](https://user-images.githubusercontent.com/1259324/70901054-ff30d500-2034-11ea-8209-03a2de40fefd.png)
 
-###Update debian go/bin execute script
+### Update debian go/bin execute script
 ----------
 This script will help to update golang version also the thirdparty package with their command
 Need to set the golang_package, golang_path,thid_packages_path, and the packages you want to build and install

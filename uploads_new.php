@@ -451,10 +451,9 @@ class SimpleFile
      */
     public function fontMark($imageSrc, $text, $fontSrc = '/usr/share/fonts/simhei.ttf', $fontSize = 20, $fontX = 20, $fontY = 30, $fontColor = [255, 255, 255], $showOrTransfer = false)
     {
-error_log(var_export(['imagesrc' => $imageSrc ], 1)."\n", 3, "/var/log/php_errors.log");
         $imageInfo = getimagesize($imageSrc);
         $imageType = image_type_to_extension($imageInfo[2], false);
-error_log(var_export(['imagetyp' => $imageType ], 1)."\n", 3, "/var/log/php_errors.log");
+
         if (!in_array($imageType, ['png', 'jpg', 'jpeg', 'gif'])) {
             return true;
         }

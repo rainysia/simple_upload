@@ -318,7 +318,7 @@ class SimpleFile
                     if (!move_uploaded_file($upload_file, $this->saveDir.$upload_file_name)) {
                         echo 'Copy file failed!';
                     }
-                    $this->fontMark($this->saveDir.$upload_file_name, '@凉拌回锅肉醋溜小番茄', '/usr/share/fonts/simhei.ttf', 16, $fontX = 20, $fontY = 30, $fontColor = [255, 255, 255], $showOrTransfer = false);
+                    $this->fontMark($this->saveDir.$upload_file_name, '@凉拌回锅肉醋溜小番茄', '/usr/share/fonts/simhei.ttf', 16, 2, $fontColor = [255, 255, 255], $showOrTransfer = false);
                 } catch (Exception $e) {
                     echo 'Error upload:'.$e->getMessage();
                 }
@@ -442,15 +442,15 @@ class SimpleFile
      * @param string  $text           Font Mark Text
      * @param string  $fontSrc        Font full path with font name and extension.
      * @param integer $fontSize       Font Size
-     * @param integer $fontX          X point
-     * @param integer $fontY          Y point
+     * @param integer $position       1 Top-Left 2, Bottom-Left
      * @param array   $fontColor      RGB [255, 255, 255]
      * @param boolean $showOrTransfer true will show directly, false will transfer and show
      *
      * @return void
      */
-    public function fontMark($imageSrc, $text, $fontSrc = '/usr/share/fonts/simhei.ttf', $fontSize = 20, $fontX = 20, $fontY = 30, $fontColor = [255, 255, 255], $showOrTransfer = false)
+    public function fontMark($imageSrc, $text, $fontSrc = '/usr/share/fonts/simhei.ttf', $fontSize = 20, $position = 2, $fontColor = [255, 255, 255], $showOrTransfer = false)
     {
+        $positionArr = [1, 2, 3, 4, 5]; // 1 Top-Left 2, Bottom-Left, 3, Top-Right, 4, Botton-Right, 5, Middle
         $imageInfo = getimagesize($imageSrc);
         $imageType = image_type_to_extension($imageInfo[2], false);
 
@@ -471,6 +471,22 @@ class SimpleFile
         $fun = "imagecreatefrom".$imageType;
         $this->image = $fun($imageSrc);
         $imageColor = imagecolorallocate($this->image, $fontColor[0], $fontColor[1], $fontColor[2]);
+
+        if (!in_array($position, $positionArr)) {
+            $position = 2;
+        }
+
+        $fontX = 20;
+        $fontY = 30;
+        switch ($position) {
+            case 1:
+                break;
+            case 2:
+                $fontY = $imageInfo[1] - $fontY;
+                break;
+            default:
+                break;
+        }
         imagettftext($this->image, $fontSize, 0, $fontX, $fontY, $imageColor, $fontSrc, $text);
 
         $fun2 = 'image'.$this->imageInfo['type'];

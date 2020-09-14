@@ -59,7 +59,7 @@ http://ip or domain/file.php
 
 ### punctuation_cn_to_en.sh
 ---------
-It will translate all chinese punctuation to english punctuation, run 
+It will translate all chinese punctuation to english punctuation, run
 ```
 ./punctuation_cn_to_en.sh path[absolute path or relative path or filename]
 ```
@@ -156,3 +156,4 @@ Update
 2019-07-12 09:56:17 add bak_debian.sh<br />
 2019-12-16 18:49:25 add sync_git_projects.sh<br />
 2020-03-06 01:07:49 add go_update.sh<br />
+2020-09-14 18:48:22 support font mark<br />

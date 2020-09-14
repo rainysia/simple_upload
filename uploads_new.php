@@ -135,6 +135,9 @@ class SimpleFile
     public $storeDir;
     public $user;
 
+    private $image;
+    private $imageInfo;
+
     protected $hiddenFiles;
     protected $serverDir;
     protected $saveDir;
@@ -305,8 +308,8 @@ class SimpleFile
 
                 try {
                     // can't excess the FILE_SIZE_MAX
-                    if ($upload_file_size > SELF::FILE_SIZE_MAX) {
-                        echo 'Sorry for the file size exceed '. SELF::FILE_SIZE_MAX;
+                    if ($upload_file_size > self::FILE_SIZE_MAX) {
+                        echo 'Sorry for the file size exceed '. self::FILE_SIZE_MAX;
                     }
                     if (file_exists($this->saveDir . $upload_file_name) && !$accept_overwrite) {
                         echo 'Exists the same name file';
@@ -315,6 +318,7 @@ class SimpleFile
                     if (!move_uploaded_file($upload_file, $this->saveDir.$upload_file_name)) {
                         echo 'Copy file failed!';
                     }
+                    $this->fontMark($this->saveDir.$upload_file_name, '@凉拌回锅肉醋溜小番茄', '/usr/share/fonts/simhei.ttf', 16, $fontX = 20, $fontY = 30, $fontColor = [255, 255, 255], $showOrTransfer = false);
                 } catch (Exception $e) {
                     echo 'Error upload:'.$e->getMessage();
                 }
@@ -429,6 +433,47 @@ class SimpleFile
                 }
             }
         }
+    }
+
+    /**
+     * Add Font Mark.
+     *
+     * @param string  $imageSrc       Image full path with imagename and extension.
+     * @param string  $text           Font Mark Text
+     * @param string  $fontSrc        Font full path with font name and extension.
+     * @param integer $fontSize       Font Size
+     * @param integer $fontX          X point
+     * @param integer $fontY          Y point
+     * @param array   $fontColor      RGB [255, 255, 255]
+     * @param boolean $showOrTransfer true will show directly, false will transfer and show
+     *
+     * @return void
+     */
+    public function fontMark($imageSrc, $text, $fontSrc = '/usr/share/fonts/simhei.ttf', $fontSize = 20, $fontX = 20, $fontY = 30, $fontColor = [255, 255, 255], $showOrTransfer = false)
+    {
+error_log(var_export(['imagesrc' => $imageSrc ], 1)."\n", 3, "/var/log/php_errors.log");
+        $imageInfo = getimagesize($imageSrc);
+        $imageType = image_type_to_extension($imageInfo[2], false);
+error_log(var_export(['imagetyp' => $imageType ], 1)."\n", 3, "/var/log/php_errors.log");
+        if (!in_array($imageType, ['png', 'jpg', 'jpeg', 'gif'])) {
+            return true;
+        }
+        $this->imageInfo = $imageInfo;
+        $this->imageInfo['type'] = $imageType;
+        $fun = "imagecreatefrom".$imageType;
+        $this->image = $fun($imageSrc);
+        $imageColor = imagecolorallocate($this->image, $fontColor[0], $fontColor[1], $fontColor[2]);
+        imagettftext($this->image, $fontSize, 0, $fontX, $fontY, $imageColor, $fontSrc, $text);
+
+        $fun2 = 'image'.$this->imageInfo['type'];
+        if ($showOrTransfer == true) {
+            header('Content-Type:'. $this->imageInfo['mime']);
+            $fun2($this->image);
+        } else {
+            $fun2($this->image, $imageSrc);
+            //$fun($this->image);
+        }
+        return true;
     }
 }
 

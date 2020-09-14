@@ -454,6 +454,10 @@ class SimpleFile
         $imageInfo = getimagesize($imageSrc);
         $imageType = image_type_to_extension($imageInfo[2], false);
 
+        if (!in_array($imageType, ['png', 'jpg', 'jpeg', 'gif'])) {
+            return true;
+        }
+
         $displayType = pathinfo($imageSrc, PATHINFO_EXTENSION);
 
         if ($displayType != $imageType) {
@@ -463,9 +467,6 @@ class SimpleFile
             $imageSrc = $newImageSrc;
         }
 
-        if (!in_array($imageType, ['png', 'jpg', 'jpeg', 'gif'])) {
-            return true;
-        }
         $this->imageInfo = $imageInfo;
         $this->imageInfo['type'] = $imageType;
         $fun = "imagecreatefrom".$imageType;

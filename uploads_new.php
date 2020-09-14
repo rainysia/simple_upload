@@ -454,6 +454,15 @@ class SimpleFile
         $imageInfo = getimagesize($imageSrc);
         $imageType = image_type_to_extension($imageInfo[2], false);
 
+        $displayType = pathinfo($imageSrc, PATHINFO_EXTENSION);
+
+        if ($displayType != $imageType) {
+            $newImageSrc = pathinfo($imageSrc, PATHINFO_DIRNAME).DIRECTORY_SEPARATOR.pathinfo($imageSrc, PATHINFO_FILENAME).'.'.$imageType;
+            copy($imageSrc, $newImageSrc);
+            unlink($imageSrc);
+            $imageSrc = $newImageSrc;
+        }
+
         if (!in_array($imageType, ['png', 'jpg', 'jpeg', 'gif'])) {
             return true;
         }

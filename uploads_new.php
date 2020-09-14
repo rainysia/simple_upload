@@ -276,7 +276,7 @@ class SimpleFile
                 } else {
                     echo $_REQUEST['del_file']." is not a real file!";
                 }
-            } catch ( Exception $e) {
+            } catch (Exception $e) {
                 echo 'delete file error:'.$e->getMessage();
                 echo '<script type="text/javascript" charset="utf-8">location.replace("'.$_SERVER['HTTP_REFERER'].'")</script>';
             }

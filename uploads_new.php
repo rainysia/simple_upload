@@ -438,7 +438,7 @@ class SimpleFile
     /**
      * Add Font Mark.
      *
-     * @param string  $imageSrc       Image full path with imagename and extension.
+     * @param string $imageSrc Image full path with imagename and extension.
      *
      * @return void
      */
@@ -450,7 +450,7 @@ class SimpleFile
          *
          * $_REQUEST['mark']:        The font mark content, default '@醋溜小番茄'
          * $_REQUEST['size']:        Font mark size, default 16
-         * $_REQUEST['position']:    Font mark position, only Top-Left 1 and Bottom-left with 2, default 2
+         * $_REQUEST['position']:    Font mark position, Top-Left 1 and Bottom-Left with 2, Top-Right 3 and Bottom-Right with 4, Middle 5, default 2
          * $_REQUEST['color']:       Font Color, default 255,255,255
          * $_REQUEST['date']:        Need to append date or not, 1 will append after the mark,  default no need
          * $_REQUEST['show']:        Preview the font mark, default will preview and won't do the transfer, 1 will transfer
@@ -509,6 +509,17 @@ class SimpleFile
                 break;
             case 2:
                 $fontY = $imageInfo[1] - $fontY;
+                break;
+            case 3:
+                $fontX = $imageInfo[0] - strlen($text) * $fontSize / 2 - 5;
+                break;
+            case 4:
+                $fontX = $imageInfo[0] - strlen($text) * $fontSize / 2 - 5;
+                $fontY = $imageInfo[1] - $fontY;
+                break;
+            case 5:
+                $fontX = $imageInfo[0]/2 - strlen($text) * $fontSize / 4;
+                $fontY = $imageInfo[1]/2 - 5;
                 break;
             default:
                 break;

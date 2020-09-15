@@ -40,6 +40,13 @@ http://ip or domain/uploads.php?user=superadmin
 
 ![uploads.php can delete](https://cloud.githubusercontent.com/assets/1259324/13483279/03fe57fa-e12e-11e5-877e-0af62cb7cc5a.png)
 
+```
+Add the font mark when upload an image.
+http://ip or domain/uploads.php?user=superadmin&mark=@helloworld&size=18&position=1&color=255,255,255&show=0&date=1
+```
+![uploads.php with image fontmark](https://user-images.githubusercontent.com/1259324/93190145-94ecc280-f775-11ea-878b-63c576592f2a.jpeg)
+
+
 ### adminer.php
 -----------
 Simple DB manager file with one php file.

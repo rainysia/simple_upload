@@ -318,7 +318,7 @@ class SimpleFile
                     if (!move_uploaded_file($upload_file, $this->saveDir.$upload_file_name)) {
                         echo 'Copy file failed!';
                     }
-                    $this->fontMark($this->saveDir.$upload_file_name, '@凉拌回锅肉醋溜小番茄', '/usr/share/fonts/simhei.ttf', 16, 2, $fontColor = [255, 255, 255], $showOrTransfer = false);
+                    $this->fontMark($this->saveDir.$upload_file_name);
                 } catch (Exception $e) {
                     echo 'Error upload:'.$e->getMessage();
                 }
@@ -439,17 +439,33 @@ class SimpleFile
      * Add Font Mark.
      *
      * @param string  $imageSrc       Image full path with imagename and extension.
-     * @param string  $text           Font Mark Text
-     * @param string  $fontSrc        Font full path with font name and extension.
-     * @param integer $fontSize       Font Size
-     * @param integer $position       1 Top-Left 2, Bottom-Left
-     * @param array   $fontColor      RGB [255, 255, 255]
-     * @param boolean $showOrTransfer true will show directly, false will transfer and show
      *
      * @return void
      */
-    public function fontMark($imageSrc, $text, $fontSrc = '/usr/share/fonts/simhei.ttf', $fontSize = 20, $position = 2, $fontColor = [255, 255, 255], $showOrTransfer = false)
+    public function fontMark($imageSrc)
     {
+        /*
+         * $_REQUEST, Optional
+         * index.php?user=superadmin&mark=@HelloWorld&size=18&position=1&color=255,255,255&show=0&date=1
+         *
+         * $_REQUEST['mark']:        The font mark content, default '@醋溜小番茄'
+         * $_REQUEST['size']:        Font mark size, default 16
+         * $_REQUEST['position']:    Font mark position, only Top-Left 1 and Bottom-left with 2, default 2
+         * $_REQUEST['color']:       Font Color, default 255,255,255
+         * $_REQUEST['date']:        Need to append date or not, 1 will append after the mark,  default no need
+         * $_REQUEST['show']:        Preview the font mark, default will preview and won't do the transfer, 1 will transfer
+         *
+         * fontSrc put into ./fonts/ folder
+         */
+        $fontMarkArr = [
+            'text'           => (isset($_REQUEST['mark']) && strlen(trim($_REQUEST['mark'])) > 1) ? trim($_REQUEST['mark']) : '@醋溜小番茄',
+            'fontSrc'        => '/usr/share/fonts/chinese/叶根友疾风草书.ttf',
+            'fontSize'       => (isset($_REQUEST['size']) && $_REQUEST['size'] >= 8 && $_REQUEST['size'] <= 20) ? $_REQUEST['size'] : 16,
+            'fontPosition'   => (isset($_REQUEST['position']) && in_array($_REQUEST['position'], [1, 2])) ? $_REQUEST['position'] : 2,
+            'fontColor'      => (isset($_REQUEST['color']) && count(explode(",", $_REQUEST['color'])) == 3) ? $_REQUEST['color'] : [255, 255, 255],
+            'date'           => (isset($_REQUEST['date']) && $_REQUEST['date'] == 1) ? ' '.date('Y-m-d H:i:s') : '',
+            'showOrTransfer' => (isset($_REQUEST['show']) && $_REQUEST['show'] == 1) ? true : false,
+        ];
         $positionArr = [1, 2, 3, 4, 5]; // 1 Top-Left 2, Bottom-Left, 3, Top-Right, 4, Botton-Right, 5, Middle
         $imageInfo = getimagesize($imageSrc);
         $imageType = image_type_to_extension($imageInfo[2], false);
@@ -466,11 +482,20 @@ class SimpleFile
             unlink($imageSrc);
             $imageSrc = $newImageSrc;
         }
-
         $this->imageInfo = $imageInfo;
         $this->imageInfo['type'] = $imageType;
         $fun = "imagecreatefrom".$imageType;
         $this->image = $fun($imageSrc);
+
+        $fontColor      = $fontMarkArr['fontColor'];
+        $position       = $fontMarkArr['fontPosition'];
+        $fontSize       = $fontMarkArr['fontSize'];
+        $fontSrc        = $fontMarkArr['fontSrc'];
+        $text           = $fontMarkArr['text'];
+        $date           = $fontMarkArr['date'];
+        $text           = $text.$date;
+        $showOrTransfer = $fontMarkArr['showOrTransfer'];
+
         $imageColor = imagecolorallocate($this->image, $fontColor[0], $fontColor[1], $fontColor[2]);
 
         if (!in_array($position, $positionArr)) {

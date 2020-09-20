@@ -460,7 +460,7 @@ class SimpleFile
         $fontMarkArr = [
             'text'           => (isset($_REQUEST['mark']) && strlen(trim($_REQUEST['mark'])) > 1) ? trim($_REQUEST['mark']) : '@醋溜小番茄',
             'fontSrc'        => '/usr/share/fonts/chinese/叶根友疾风草书.ttf',
-            'fontSize'       => (isset($_REQUEST['size']) && $_REQUEST['size'] >= 8 && $_REQUEST['size'] <= 20) ? $_REQUEST['size'] : 16,
+            'fontSize'       => (isset($_REQUEST['size']) && $_REQUEST['size'] >= 8 && $_REQUEST['size'] <= 80) ? $_REQUEST['size'] : 16,
             'fontPosition'   => (isset($_REQUEST['position']) && in_array($_REQUEST['position'], [1, 2])) ? $_REQUEST['position'] : 2,
             'fontColor'      => (isset($_REQUEST['color']) && count(explode(",", $_REQUEST['color'])) == 3) ? $_REQUEST['color'] : [255, 255, 255],
             'date'           => (isset($_REQUEST['date']) && $_REQUEST['date'] == 1) ? ' '.date('Y-m-d H:i:s') : '',

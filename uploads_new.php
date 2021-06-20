@@ -158,6 +158,11 @@ class SimpleFile
         'name'  => true,
     ];
 
+    private $_forbiddenExt = [
+        'php' => true,
+        'py'  => true,
+    ];
+
     /**
      * Construct.
      *
@@ -295,6 +300,10 @@ class SimpleFile
             $upload_file = isset($_FILES['upload_file']['tmp_name']) ? $_FILES['upload_file']['tmp_name'] : '';
             $upload_file_name = isset($_FILES['upload_file']['name']) ? $_FILES['upload_file']['name'] : '';
             $upload_file_size = isset($_FILES['upload_file']['size']) ? $_FILES['upload_file']['size'] : '';
+
+            $ext = pathinfo($upload_file_name, PATHINFO_EXTENSION);
+
+
             if ($upload_file) {
                 // set upload parameters
                 ini_set('upload_max_filesize', '2048M');
@@ -307,6 +316,10 @@ class SimpleFile
                 $accept_overwrite = 1;
 
                 try {
+                    if (in_array($ext, $this->_forbiddenExt)) {
+                        echo '<script type="text/javascript" charset="utf-8">location.replace("'.$_SERVER['HTTP_REFERER'].'")</script>';
+                        exit;
+                    }
                     // can't excess the FILE_SIZE_MAX
                     if ($upload_file_size > self::FILE_SIZE_MAX) {
                         echo 'Sorry for the file size exceed '. self::FILE_SIZE_MAX;

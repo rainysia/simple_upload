@@ -159,8 +159,8 @@ class SimpleFile
     ];
 
     private $_forbiddenExt = [
-        'php' => true,
-        'py'  => true,
+        'php',
+        'py',
     ];
 
     /**

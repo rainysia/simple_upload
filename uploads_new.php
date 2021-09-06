@@ -44,8 +44,8 @@ a:hover {color:red;text-decoration:underline;}
 #form1 .btn1 input {padding:0 4px 0 4px;}
 #typeAll {padding:10px 0px 0px 50px;}
 #typeAll .hr1 {width:85%;height:5px;margin:2px 2px 2px 0;background:rgba(21, 121, 64, 0.85)!important;
-	-moz-box-shadow:0px 0px 1px #c3c3c3;
-	-webkit-box-shadow:0px 0px 1px #c3c3c3;
+    -moz-box-shadow:0px 0px 1px #c3c3c3;
+    -webkit-box-shadow:0px 0px 1px #c3c3c3;
     -box-shadow:0px 0px 1px #c3c3c3;}
 #typeAll a {text-decoration:none;font-weight:bold;font-size:18px;color:#000000;}
 #typeAll a:hover {text-decoration:underline;color:#277C5F;font-size:18px;}
@@ -111,14 +111,14 @@ function changeSortName(sortName){
  * @category   Tools
  * @package    UploadsDownload
  * @author     Rainy Sia <rainysia@gmail.com>
- * @copyright  2006-2018 BTROOT.ORG
+ * @copyright  2006-2021 BTROOT.ORG
  * @license    http://www.wikipedia.org/user_guide/license.html V1
- * @version    GIT: 3.0.1
+ * @version    GIT: 4.0.1
  * @createTime 2013-11-12 16:57:53
- * @lastChange 2018-02-08 13:45:51
+ * @lastChange 2021-09-03 17:43:09
  *
  * @link http://www.btroot.org
-**/
+ */
 
 /**
  * Generated php file
@@ -161,6 +161,21 @@ class SimpleFile
     private $_forbiddenExt = [
         'php',
         'py',
+    ];
+
+    private $_imgExt = [
+        'jpg',
+        'jpeg',
+        'png',
+        'gif',
+    ];
+
+    private $_position = [
+        1, // Top-Left
+        2, // Bottom-Left
+        3, // Top-Right
+        4, // Bottom-Right
+        5, // Middle
     ];
 
     /**
@@ -303,7 +318,6 @@ class SimpleFile
 
             $ext = pathinfo($upload_file_name, PATHINFO_EXTENSION);
 
-
             if ($upload_file) {
                 // set upload parameters
                 ini_set('upload_max_filesize', '2048M');
@@ -332,6 +346,7 @@ class SimpleFile
                         echo 'Copy file failed!';
                     }
                     $this->fontMark($this->saveDir.$upload_file_name);
+                    $this->imageMark($this->saveDir.$upload_file_name);
                 } catch (Exception $e) {
                     echo 'Error upload:'.$e->getMessage();
                 }
@@ -449,6 +464,135 @@ class SimpleFile
     }
 
     /**
+     * Add Image Mark.
+     *
+     * @param string $imageSrc Image full path with imagename and extension.
+     *
+     * @return void
+     */
+    public function imageMark($imageSrc)
+    {
+        /*
+         * $_REQUEST, Optional and required mark_url
+         * index.php?user=superadmin&mark_img_url=http://www.123.com/1.png&position=1&date=1
+         * index.php?user=superadmin&mark_type=2&position=5&show=0
+         *
+         * $_REQUEST['mark_url']:   The image water mark url, default will use 'xppcool' image
+         * $_REQUEST['mark_type']:  0: no mark, 1:font mark, 2:image mark, default 0
+         * $_REQUEST['position']:   Font mark position, Top-Left 1 and Bottom-Left with 2, Top-Right 3 and Bottom-Right with 4, Middle 5, default 2
+         * $_REQUEST['show']:       Preview the font mark, default will preview and won't do the transfer, 1 will transfer
+         *
+         */
+        $imgMarkArr = [
+            'showOrTransfer' => (isset($_REQUEST['show']) && $_REQUEST['show'] == 1) ? true : false,
+            'zoomIn'         => (isset($_REQUEST['zoom']) && in_array($_REQUEST['zoom'], [1, 2, 3, 4])) ? $_REQUEST['zoom'] : 0,
+            'dstImgUrl'      => $imageSrc,
+            'markImgUrl'     => (isset($_REQUEST['mark_img_url']) && strlen($_REQUEST['mark_img_url']) > 0) ? trim($_REQUEST['mark_img_url']) : '/home/media/pic/short/portrait1.jpg',
+            'position'       => (isset($_REQUEST['position'])     && in_array($_REQUEST['position'], $this->_position)) ? $_REQUEST['position'] : 2,
+            'markType'       => $_REQUEST['mark_type'] ?? 0,
+        ];
+        if ($imgMarkArr['markType'] != 2) {
+            return true;
+        }
+        if (!fopen($imgMarkArr['markImgUrl'], 'r')) {
+            return true;
+        }
+        // Step 1. Mark Image
+        list($markImgWidth, $markImgHeigh, $markImgType) = getimagesize($imgMarkArr['markImgUrl']);
+        $markImgType = image_type_to_extension($markImgType, false);
+        if (!in_array($markImgType, $this->_imgExt)) {
+            return true;
+        }
+        $markImgFunc   = 'imagecreatefrom' . $markImgType;
+        $markImgHandle = $markImgFunc($imgMarkArr['markImgUrl']);
+        // Step 1.1 shorten the raw mark img to 1/1
+        if ($imgMarkArr['zoomIn'] > 1) {
+            $markImgWidthQuar = round($markImgWidth / $imgMarkArr['zoomIn']);
+            $markImgHeighQuar = round($markImgHeigh / $imgMarkArr['zoomIn']);
+        } else {
+            $markImgWidthQuar = $markImgWidth;
+            $markImgHeighQuar = $markImgHeigh;
+        }
+        // Step 1.2 Create canvas in mem
+        $markImage = imagecreatetruecolor($markImgWidthQuar, $markImgHeighQuar);
+        if ($markImgType == 'png') {
+            imagealphablending($markImage, false);
+            imagesavealpha($markImage, true);
+        }
+        // Step 1.3 crop
+        // 载入图片$markImgHandle在新图$markImage中的x座标， y座标; 载入图片要载入的区域x座标，y座标; 设定载入的原图的宽度(设置缩放),高度(缩放);原图要载入的宽度，高度
+        imagecopyresampled($markImage, $markImgHandle, 0, 0, 0, 0, $markImgWidthQuar, $markImgHeighQuar, $markImgWidth, $markImgHeigh);
+        imagejpeg($markImage, '/tmp/test_mark.jpeg');
+        // Step 1.4 destroy
+        imagedestroy($markImgHandle);
+
+        // Step 2. Target Image
+        $dstImgInfo = getimagesize($imgMarkArr['dstImgUrl']);
+        $dstImgType = image_type_to_extension($dstImgInfo[2], false);
+        if (!in_array($dstImgType, $this->_imgExt)) {
+            return true;
+        }
+        $dstImgFunc = 'imagecreatefrom' . $dstImgType;
+        $dstImgHandle = $dstImgFunc($imgMarkArr['dstImgUrl']);
+        // Step 2.1 Merge and past the mark
+
+        // Step 2.2 Set position
+        $markX = 10;
+        $markY = 10;
+        switch ($imgMarkArr['position']) {
+        case 1:
+            break; // Top-Left
+        case 2:
+            $markY = $dstImgInfo[1] - $markImgHeighQuar - $markY;
+            break; // Bottom-Left
+        case 3:
+            $markX = $dstImgInfo[0] - $markImgWidthQuar - $markX;
+            break; // Top-Right
+        case 4:
+            $markX = $dstImgInfo[0] - $markImgWidthQuar - $markX;
+            $markY = $dstImgInfo[1] - $markImgHeighQuar - $markY;
+            break; // Bottom-Right
+        case 5:
+            $markX = $dstImgInfo[0]/2 - $markImgWidthQuar/2;
+            $markY = $dstImgInfo[1]/2 - $markImgHeighQuar/2;
+            break; // Middle
+        default:
+            break;
+        }
+        if ($markImgType != 'png') {
+            $transparent = 100; // set transparent = 30
+            /*  
+             *  GdImage dstImge, GdImage srtImage, dst_x, dst_y, src_x, src_y, src_width, src_heigh, pct
+             *      dstImgHandle: 目标图像链接资源, srcImage: 水印图像链接资源
+             *      dst_x: 目标点的x坐标, dst_y: 目标点的y坐标
+             *      src_x: 设置水印的x坐标， src_x: 水印的y坐标
+             *      src_width: 设置水印的宽度， src_heigh: 水印的高度
+             *
+             */
+            $res = imagecopymerge($dstImgHandle, $markImage, $markX, $markY, 0, 0, $markImgWidthQuar, $markImgHeighQuar, $transparent);
+        } else {
+            // translucent png
+            $res = imagecopymerge($dstImgHandle, $markImage, $markX, $markY, 0, 0, $markImgWidthQuar, $markImgHeighQuar);
+        }
+        // Step 2.2 destroy
+        imagedestroy($markImage);
+
+        // Step 3 Output
+        $outImgFunc = 'image' . $markImgType;
+        if ($imgMarkArr['showOrTransfer'] == true) {
+            header('Content-Type:'. $dstImgInfo['mime']);
+            $outImgFunc($dstImgHandle);
+            exit;
+        } else {
+            $dstImagePathInfo = pathinfo($imgMarkArr['dstImgUrl']);
+            $outImgFunc($dstImgHandle, $this->saveDir . $dstImagePathInfo['filename'] . '_mark.' . strtolower($dstImagePathInfo['extension']));
+        }
+        unlink($imageSrc);
+
+        return true;
+    }
+
+    /**
      * Add Font Mark.
      *
      * @param string $imageSrc Image full path with imagename and extension.
@@ -461,29 +605,34 @@ class SimpleFile
          * $_REQUEST, Optional
          * index.php?user=superadmin&mark=@HelloWorld&size=18&position=1&color=255,255,255&show=0&date=1
          *
-         * $_REQUEST['mark']:        The font mark content, default '@醋溜小番茄'
-         * $_REQUEST['size']:        Font mark size, default 16
-         * $_REQUEST['position']:    Font mark position, Top-Left 1 and Bottom-Left with 2, Top-Right 3 and Bottom-Right with 4, Middle 5, default 2
-         * $_REQUEST['color']:       Font Color, default 255,255,255
-         * $_REQUEST['date']:        Need to append date or not, 1 will append after the mark,  default no need
-         * $_REQUEST['show']:        Preview the font mark, default will preview and won't do the transfer, 1 will transfer
+         * $_REQUEST['mark']:           The font mark content, default '@醋溜小番茄'
+         * $_REQUEST['size']:           Font mark size, default 16
+         * $_REQUEST['position']:       Font mark position, Top-Left 1 and Bottom-Left with 2, Top-Right 3 and Bottom-Right with 4, Middle 5, default 2
+         * $_REQUEST['color']:          Font Color, default 255,255,255
+         * $_REQUEST['date']:           Need to append date or not, 1 will append after the mark,  default no need
+         * $_REQUEST['show']:           Preview the font mark, default will preview and won't do the transfer, 1 will transfer
+         * $_REQUEST['mark_type']:      0: no mark, 1:font mark, 2:image mark, default 0
          *
          * fontSrc put into ./fonts/ folder
          */
         $fontMarkArr = [
-            'text'           => (isset($_REQUEST['mark']) && strlen(trim($_REQUEST['mark'])) > 1) ? trim($_REQUEST['mark']) : '@醋溜小番茄',
+            'text'           => (isset($_REQUEST['mark'])         && strlen(trim($_REQUEST['mark'])) > 1) ? trim($_REQUEST['mark']) : '@xppcool',
             'fontSrc'        => '/usr/share/fonts/chinese/叶根友疾风草书.ttf',
-            'fontSize'       => (isset($_REQUEST['size']) && $_REQUEST['size'] >= 8 && $_REQUEST['size'] <= 80) ? $_REQUEST['size'] : 16,
-            'fontPosition'   => (isset($_REQUEST['position']) && in_array($_REQUEST['position'], [1, 2])) ? $_REQUEST['position'] : 2,
-            'fontColor'      => (isset($_REQUEST['color']) && count(explode(",", $_REQUEST['color'])) == 3) ? $_REQUEST['color'] : [255, 255, 255],
-            'date'           => (isset($_REQUEST['date']) && $_REQUEST['date'] == 1) ? ' '.date('Y-m-d H:i:s') : '',
-            'showOrTransfer' => (isset($_REQUEST['show']) && $_REQUEST['show'] == 1) ? true : false,
+            'fontSize'       => (isset($_REQUEST['size'])         && $_REQUEST['size'] >= 8 && $_REQUEST['size'] <= 80) ? $_REQUEST['size'] : 16,
+            'fontPosition'   => (isset($_REQUEST['position'])     && in_array($_REQUEST['position'], $this->_position)) ? $_REQUEST['position'] : 2,
+            'fontColor'      => (isset($_REQUEST['color'])        && count(explode(",", $_REQUEST['color'])) == 3) ? $_REQUEST['color'] : [255, 255, 255],
+            'date'           => (isset($_REQUEST['date'])         && $_REQUEST['date'] == 1) ? ' '.date('Y-m-d H:i:s') : '',
+            'showOrTransfer' => (isset($_REQUEST['show'])         && $_REQUEST['show'] == 1) ? true : false,
+            'markType'       => $_REQUEST['mark_type']            ?? 0,
         ];
-        $positionArr = [1, 2, 3, 4, 5]; // 1 Top-Left 2, Bottom-Left, 3, Top-Right, 4, Botton-Right, 5, Middle
+
+        if ($fontMarkArr['markType'] != 1) {
+            return true;
+        }
         $imageInfo = getimagesize($imageSrc);
         $imageType = image_type_to_extension($imageInfo[2], false);
 
-        if (!in_array($imageType, ['png', 'jpg', 'jpeg', 'gif'])) {
+        if (!in_array($imageType, $this->_imgExt)) {
             return true;
         }
 
@@ -511,31 +660,31 @@ class SimpleFile
 
         $imageColor = imagecolorallocate($this->image, $fontColor[0], $fontColor[1], $fontColor[2]);
 
-        if (!in_array($position, $positionArr)) {
+        if (!in_array($position, $this->_position)) {
             $position = 2;
         }
 
         $fontX = 20;
         $fontY = 30;
         switch ($position) {
-            case 1:
-                break;
-            case 2:
-                $fontY = $imageInfo[1] - $fontY;
-                break;
-            case 3:
-                $fontX = $imageInfo[0] - strlen($text) * $fontSize / 2 - 5;
-                break;
-            case 4:
-                $fontX = $imageInfo[0] - strlen($text) * $fontSize / 2 - 5;
-                $fontY = $imageInfo[1] - $fontY;
-                break;
-            case 5:
-                $fontX = $imageInfo[0]/2 - strlen($text) * $fontSize / 4;
-                $fontY = $imageInfo[1]/2 - 5;
-                break;
-            default:
-                break;
+        case 1:
+            break;
+        case 2:
+            $fontY = $imageInfo[1] - $fontY;
+            break;
+        case 3:
+            $fontX = $imageInfo[0] - strlen($text) * $fontSize / 2 - 5;
+            break;
+        case 4:
+            $fontX = $imageInfo[0] - strlen($text) * $fontSize / 2 - 5;
+            $fontY = $imageInfo[1] - $fontY;
+            break;
+        case 5:
+            $fontX = $imageInfo[0]/2 - strlen($text) * $fontSize / 4;
+            $fontY = $imageInfo[1]/2 - 5;
+            break;
+        default:
+            break;
         }
         imagettftext($this->image, $fontSize, 0, $fontX, $fontY, $imageColor, $fontSrc, $text);
 
@@ -547,6 +696,7 @@ class SimpleFile
             $fun2($this->image, $imageSrc);
             //$fun($this->image);
         }
+        imagedestroy($this->image);
         return true;
     }
 }

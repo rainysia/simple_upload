@@ -161,6 +161,8 @@ class SimpleFile
     private $_forbiddenExt = [
         'php',
         'py',
+        'sh',
+        'bash',
     ];
 
     private $_imgExt = [
@@ -168,6 +170,11 @@ class SimpleFile
         'jpeg',
         'png',
         'gif',
+    ];
+
+    private $_imgMarkUrl = [
+        'color' => '/home/media/pic/short/xppcool.png',
+        'white' => '/home/media/pic/short/xppcool_white.png',
     ];
 
     private $_position = [
@@ -481,21 +488,28 @@ class SimpleFile
          * $_REQUEST['mark_type']:  0: no mark, 1:font mark, 2:image mark, default 0
          * $_REQUEST['position']:   Font mark position, Top-Left 1 and Bottom-Left with 2, Top-Right 3 and Bottom-Right with 4, Middle 5, default 2
          * $_REQUEST['show']:       Preview the font mark, default will preview and won't do the transfer, 1 will transfer
+         * $_REQUEST['color']:      Default will use white water mark image, 1 will use colorful water image
+         * $_REQUEST['zoom']        Zoom mark: 1:1, 1:2, 1:3, 1:4
          *
          */
         $imgMarkArr = [
             'showOrTransfer' => (isset($_REQUEST['show']) && $_REQUEST['show'] == 1) ? true : false,
             'zoomIn'         => (isset($_REQUEST['zoom']) && in_array($_REQUEST['zoom'], [1, 2, 3, 4])) ? $_REQUEST['zoom'] : 0,
             'dstImgUrl'      => $imageSrc,
-            'markImgUrl'     => (isset($_REQUEST['mark_img_url']) && strlen($_REQUEST['mark_img_url']) > 0) ? trim($_REQUEST['mark_img_url']) : '/home/media/pic/short/portrait1.jpg',
+            'markImgUrl'     => (isset($_REQUEST['mark_img_url']) && strlen($_REQUEST['mark_img_url']) > 0) ? trim($_REQUEST['mark_img_url']) : $this->_imgMarkUrl['color'],
             'position'       => (isset($_REQUEST['position'])     && in_array($_REQUEST['position'], $this->_position)) ? $_REQUEST['position'] : 2,
             'markType'       => $_REQUEST['mark_type'] ?? 0,
+            'color'          => $_REQUEST['mark_color'] ?? 1,
         ];
+
         if ($imgMarkArr['markType'] != 2) {
             return true;
         }
         if (!fopen($imgMarkArr['markImgUrl'], 'r')) {
             return true;
+        }
+        if ($imgMarkArr['color'] != 1 && (!isset($_REQUEST['mark_img_url']))) {
+            $imgMarkArr['markImgUrl'] = $this->_imgMarkUrl['white'];
         }
         // Step 1. Mark Image
         list($markImgWidth, $markImgHeigh, $markImgType) = getimagesize($imgMarkArr['markImgUrl']);
@@ -522,7 +536,8 @@ class SimpleFile
         // Step 1.3 crop
         // 载入图片$markImgHandle在新图$markImage中的x座标， y座标; 载入图片要载入的区域x座标，y座标; 设定载入的原图的宽度(设置缩放),高度(缩放);原图要载入的宽度，高度
         imagecopyresampled($markImage, $markImgHandle, 0, 0, 0, 0, $markImgWidthQuar, $markImgHeighQuar, $markImgWidth, $markImgHeigh);
-        imagejpeg($markImage, '/tmp/test_mark.jpeg');
+        //imagejpeg($markImage, '/tmp/test_mark.jpeg');
+        imagepng($markImage, '/tmp/test_mark.png');
         // Step 1.4 destroy
         imagedestroy($markImgHandle);
 
@@ -559,21 +574,15 @@ class SimpleFile
         default:
             break;
         }
-        if ($markImgType != 'png') {
-            $transparent = 100; // set transparent = 30
-            /*  
-             *  GdImage dstImge, GdImage srtImage, dst_x, dst_y, src_x, src_y, src_width, src_heigh, pct
-             *      dstImgHandle: 目标图像链接资源, srcImage: 水印图像链接资源
-             *      dst_x: 目标点的x坐标, dst_y: 目标点的y坐标
-             *      src_x: 设置水印的x坐标， src_x: 水印的y坐标
-             *      src_width: 设置水印的宽度， src_heigh: 水印的高度
-             *
-             */
-            $res = imagecopymerge($dstImgHandle, $markImage, $markX, $markY, 0, 0, $markImgWidthQuar, $markImgHeighQuar, $transparent);
-        } else {
-            // translucent png
-            $res = imagecopymerge($dstImgHandle, $markImage, $markX, $markY, 0, 0, $markImgWidthQuar, $markImgHeighQuar);
-        }
+        /* imagecopymerge will fill png background-color to black. imagecopy will not do it.
+         *  GdImage dstImge, GdImage srtImage, dst_x, dst_y, src_x, src_y, src_width, src_heigh, pct
+         *      dstImgHandle: 目标图像链接资源, srcImage: 水印图像链接资源
+         *      dst_x: 目标点的x坐标, dst_y: 目标点的y坐标
+         *      src_x: 设置水印的x坐标， src_x: 水印的y坐标
+         *      src_width: 设置水印的宽度， src_heigh: 水印的高度
+         *
+         */
+        $res = imagecopy($dstImgHandle, $markImage, $markX, $markY, 0, 0, $markImgWidthQuar, $markImgHeighQuar);
         // Step 2.2 destroy
         imagedestroy($markImage);
 
@@ -588,6 +597,8 @@ class SimpleFile
             $outImgFunc($dstImgHandle, $this->saveDir . $dstImagePathInfo['filename'] . '_mark.' . strtolower($dstImagePathInfo['extension']));
         }
         unlink($imageSrc);
+        ob_flush();
+        flush();
 
         return true;
     }

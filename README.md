@@ -42,9 +42,13 @@ http://ip or domain/uploads.php?user=superadmin
 
 ```
 Add the font mark when upload an image.
-http://ip or domain/uploads.php?user=superadmin&mark=@helloworld&size=18&position=1&color=255,255,255&show=0&date=1
+http://ip or domain/uploads.php?user=superadmin&mark_type=1&mark=@helloworld&size=18&position=1&color=255,255,255&show=0&date=1
 ```
 ![uploads.php with image fontmark](https://user-images.githubusercontent.com/1259324/93190145-94ecc280-f775-11ea-878b-63c576592f2a.jpeg)
+```
+Support image mark when upload an image.
+http://ip or domain/uploads.php?user=superadmin&mark_type=2&zoom=4
+```
 
 
 ### adminer.php
@@ -164,3 +168,4 @@ Update
 2019-12-16 18:49:25 add sync_git_projects.sh<br />
 2020-03-06 01:07:49 add go_update.sh<br />
 2020-09-14 18:48:22 support font mark<br />
+2021-09-22 15:30:58 support image mark<br />
